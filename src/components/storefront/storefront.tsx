@@ -79,6 +79,7 @@ const CATEGORY_META: Record<string, { icon: LucideIcon; accent: string; bg: stri
   'IPTV': { icon: Tv, accent: 'text-red-400', bg: 'bg-red-500/10', image: '/assets/images/playbeat/category-subscriptions.png' },
   'Streaming Accounts': { icon: Play, accent: 'text-red-400', bg: 'bg-red-500/10', image: '/assets/images/playbeat/category-giftcards.png' },
   'Gift Cards': { icon: Gift, accent: 'text-yellow-400', bg: 'bg-yellow-400/10', image: '/assets/images/playbeat/category-giftcards.png' },
+  'Smart Projectors': { icon: Tv, accent: 'text-cyan-400', bg: 'bg-cyan-500/10', image: '/assets/images/playbeat/category-projectors.png' },
   // Fallback categories matching the spec
   'Games': { icon: Cpu, accent: 'text-blue-400', bg: 'bg-blue-500/10', image: '/assets/images/playbeat/category-games.png' },
   'Software': { icon: Package, accent: 'text-purple-400', bg: 'bg-purple-500/10', image: '/assets/images/playbeat/category-software.png' },
@@ -103,6 +104,7 @@ const LANDING_CATEGORIES = [
   { name: 'AI Tools', desc: 'ChatGPT, Claude & more', icon: Sparkles, accent: 'text-blue-400', bg: 'bg-blue-500/10', image: '/assets/images/playbeat/category-ai.png' },
   { name: 'Subscriptions', desc: 'Streaming & SaaS', icon: TrendingUp, accent: 'text-emerald-400', bg: 'bg-emerald-500/10', image: '/assets/images/playbeat/category-subscriptions.png' },
   { name: 'Gift Cards', desc: 'Digital gift cards', icon: Gift, accent: 'text-yellow-400', bg: 'bg-yellow-400/10', image: '/assets/images/playbeat/category-giftcards.png' },
+  { name: 'Smart Projectors', desc: '4K home cinema', icon: Tv, accent: 'text-cyan-400', bg: 'bg-cyan-500/10', image: '/assets/images/playbeat/category-projectors.png' },
   { name: 'Free Tools', desc: 'Free digital utilities', icon: Tag, accent: 'text-cyan-400', bg: 'bg-cyan-500/10', image: '/assets/images/playbeat/category-free-tools.png' },
   { name: 'Bundles', desc: 'Multi-product bundles', icon: Layers, accent: 'text-yellow-400', bg: 'bg-yellow-400/10', image: '/assets/images/playbeat/category-bundles.png' },
 ]
@@ -758,6 +760,9 @@ export function Storefront() {
         )}
       </section>
 
+      {/* Smart Projectors Section */}
+      <SmartProjectorsSection products={products.filter((p) => p.category === 'Smart Projectors')} />
+
       {/* AI Tools Section */}
       <section className="mx-auto max-w-7xl px-4 py-12 lg:px-6">
         <div className="mb-8 text-center">
@@ -1005,6 +1010,127 @@ export function Storefront() {
         </DialogContent>
       </Dialog>
     </div>
+  )
+}
+
+// Smart Projectors section — displays real projector products with images
+function SmartProjectorsSection({ products }: { products: StoreProduct[] }) {
+  const [showAll, setShowAll] = useState(false)
+  const display = showAll ? products : products.slice(0, 8)
+  if (products.length === 0) return null
+
+  return (
+    <section className="mx-auto max-w-7xl px-4 py-12 lg:px-6">
+      <div className="mb-8 flex items-center justify-between">
+        <div>
+          <div className="inline-flex items-center gap-1.5 rounded-full border border-cyan-500/30 bg-cyan-500/10 px-3 py-1 text-xs font-bold text-cyan-300">
+            <Tv className="h-3 w-3" />
+            Flagship Hardware
+          </div>
+          <h2 className="mt-3 text-2xl font-extrabold tracking-tight text-white lg:text-3xl">
+            4K Smart Projectors
+          </h2>
+          <p className="mt-1 text-sm text-slate-400">
+            {products.length} premium projectors · Magcubic, Zerobyte, XNANO & more
+          </p>
+        </div>
+        {products.length > 8 && (
+          <button
+            onClick={() => setShowAll((v) => !v)}
+            className="hidden items-center gap-1 text-sm font-medium text-cyan-400 transition hover:text-cyan-300 sm:flex"
+          >
+            {showAll ? 'Show Less' : `View All ${products.length}`}
+            <ArrowRight className={cn('h-3.5 w-3.5 transition', showAll && 'rotate-180')} />
+          </button>
+        )}
+      </div>
+
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {display.map((p) => {
+          const showOriginal = p.originalCurrency && p.originalCurrency !== 'USD'
+          const isSoldOut = p.stock <= 0
+          return (
+            <article
+              key={p.id}
+              className={cn(
+                'group relative flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] transition',
+                isSoldOut ? 'opacity-70' : 'hover:border-cyan-500/30 hover:bg-white/[0.06]'
+              )}
+            >
+              <div className="relative aspect-[4/3] overflow-hidden bg-gradient-to-br from-slate-800/50 to-slate-900/50">
+                {p.image ? (
+                  <img
+                    src={p.image}
+                    alt={p.name}
+                    loading="lazy"
+                    className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                  />
+                ) : (
+                  <div className="grid h-full w-full place-items-center">
+                    <div className="grid h-16 w-16 place-items-center rounded-2xl bg-cyan-500/10">
+                      <Tv className="h-7 w-7 text-cyan-400" />
+                    </div>
+                  </div>
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-[#050608] via-transparent to-transparent opacity-60" />
+                <span className="absolute left-2.5 top-2.5 z-10 inline-flex items-center gap-1 rounded-full bg-cyan-500/20 px-2 py-0.5 text-[10px] font-bold text-cyan-300 backdrop-blur-md">
+                  <Tv className="h-2.5 w-2.5" />
+                  4K Projector
+                </span>
+                {isSoldOut && (
+                  <span className="absolute right-2.5 top-2.5 z-10 rounded-full bg-red-500/80 px-2 py-0.5 text-[10px] font-bold text-white backdrop-blur-md">
+                    Sold Out
+                  </span>
+                )}
+              </div>
+              <div className="flex flex-1 flex-col p-3.5">
+                <h3 className="line-clamp-2 text-sm font-semibold leading-snug text-white" title={p.name}>
+                  {p.name}
+                </h3>
+                <p className="mt-1 line-clamp-2 text-[11px] text-slate-400" title={p.description}>
+                  {p.description}
+                </p>
+                <div className="mt-2 flex items-center justify-between text-[11px] text-slate-400">
+                  <span className="font-mono">{p.sku}</span>
+                  <span className="text-cyan-400">{p.region}</span>
+                </div>
+                <div className="mt-3 flex items-end justify-between">
+                  <div>
+                    <div className="font-mono text-lg font-bold text-white">
+                      {formatPrice(p.price, (typeof window !== 'undefined' ? localStorage.getItem('pb_currency') : null) as CurrencyCode || 'PKR')}
+                    </div>
+                    {showOriginal && (
+                      <div className="text-[10px] text-slate-500">
+                        Original: {p.originalCurrency} {p.originalPrice?.toLocaleString()}
+                      </div>
+                    )}
+                  </div>
+                </div>
+                <button
+                  disabled={isSoldOut}
+                  className="mt-3 inline-flex items-center justify-center gap-1.5 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 py-2 text-xs font-bold text-white shadow-lg shadow-cyan-500/20 transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  <ShoppingCart className="h-3.5 w-3.5" />
+                  {isSoldOut ? 'Sold Out' : 'Add to Cart'}
+                </button>
+              </div>
+            </article>
+          )
+        })}
+      </div>
+
+      {products.length > 8 && (
+        <div className="mt-6 text-center sm:hidden">
+          <button
+            onClick={() => setShowAll((v) => !v)}
+            className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-slate-200"
+          >
+            {showAll ? 'Show Less' : `View All ${products.length}`}
+            <ArrowRight className={cn('h-4 w-4', showAll && 'rotate-180')} />
+          </button>
+        </div>
+      )}
+    </section>
   )
 }
 

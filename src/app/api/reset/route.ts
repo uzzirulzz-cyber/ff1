@@ -28,20 +28,19 @@ const DEFAULT_ADMIN_NAME = process.env.ADMIN_NAME || readEnv('ADMIN_NAME') || 'P
 
 // Real products from CSV (no mock data)
 // Use multiple fallback paths to find products.json regardless of cwd
-function findProductsJson(): string {
+function findJson(filename: string): string {
   const candidates = [
-    path.join(process.cwd(), 'scripts', 'products.json'),
-    '/home/z/my-project/scripts/products.json',
-    path.resolve(__dirname, '../../../..', 'scripts', 'products.json'),
+    path.join(process.cwd(), 'scripts', filename),
+    `/home/z/my-project/scripts/${filename}`,
+    path.resolve(__dirname, '../../../..', 'scripts', filename),
   ]
   for (const c of candidates) {
     if (fs.existsSync(c)) return fs.readFileSync(c, 'utf-8')
   }
-  throw new Error('products.json not found in any expected location')
+  throw new Error(`${filename} not found in any expected location`)
 }
 
-const PRODUCTS_RAW = findProductsJson()
-const PRODUCTS_JSON = JSON.parse(PRODUCTS_RAW) as Array<{
+const PRODUCTS_JSON = JSON.parse(findJson('products.json')) as Array<{
   sku: string
   name: string
   description: string
@@ -53,6 +52,25 @@ const PRODUCTS_JSON = JSON.parse(PRODUCTS_RAW) as Array<{
   tags: string[]
   stock: number
   status: 'active' | 'draft'
+}>
+
+// Smart projectors (with real images)
+const PROJECTORS_JSON = JSON.parse(findJson('projectors.json')) as Array<{
+  sku: string
+  name: string
+  description: string
+  category: string
+  priceUSD: number
+  originalPrice: number
+  originalCurrency: string
+  region: string
+  digital: boolean
+  tags: string[]
+  stock: number
+  status: 'active' | 'draft'
+  model: string
+  brand: string
+  imageUrl?: string
 }>
 
 // POST /api/reset
@@ -130,20 +148,45 @@ export async function POST(req: NextRequest) {
     })
   }
 
+  // Re-seed smart projectors (with real images)
+  for (const p of PROJECTORS_JSON) {
+    await db.product.create({
+      data: {
+        sku: p.sku,
+        name: p.name,
+        description: p.description,
+        category: p.category,
+        price: p.priceUSD,
+        currency: 'USD',
+        originalPrice: p.originalPrice,
+        originalCurrency: p.originalCurrency,
+        region: p.region,
+        stock: p.stock,
+        status: p.status,
+        digital: p.digital,
+        tags: p.tags,
+        image: p.imageUrl || null,
+      },
+    })
+  }
+
+  const totalCount = PRODUCTS_JSON.length + PROJECTORS_JSON.length
   await db.activityLog.create({
     data: {
       action: 'system.reset',
-      detail: `Database reset to seed state (${PRODUCTS_JSON.length} real products restored)`,
+      detail: `Database reset to seed state (${totalCount} real products + projectors restored)`,
       actor: auth.session.email,
     },
   })
 
-  console.log(`✅ Reset complete — ${PRODUCTS_JSON.length} products restored`)
+  console.log(`✅ Reset complete — ${totalCount} products restored (${PRODUCTS_JSON.length} digital + ${PROJECTORS_JSON.length} projectors)`)
   return NextResponse.json({
     ok: true,
     message: 'Database reset to seed state.',
     counts: {
       products: PRODUCTS_JSON.length,
+      projectors: PROJECTORS_JSON.length,
+      total: totalCount,
     },
   })
 }

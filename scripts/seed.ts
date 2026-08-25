@@ -38,8 +38,29 @@ const PRODUCTS_JSON = JSON.parse(
   status: 'active' | 'draft'
 }>
 
+// Smart projector products parsed from zerobyte CSV (with real web-sourced images)
+const PROJECTORS_JSON = JSON.parse(
+  fs.readFileSync(__dirname + '/projectors.json', 'utf-8')
+) as Array<{
+  sku: string
+  name: string
+  description: string
+  category: string
+  priceUSD: number
+  originalPrice: number
+  originalCurrency: string
+  region: string
+  digital: boolean
+  tags: string[]
+  stock: number
+  status: 'active' | 'draft'
+  model: string
+  brand: string
+  imageUrl?: string
+}>
+
 async function main() {
-  console.log('🌱 Seeding PlayBeat database with REAL CSV products...')
+  console.log('🌱 Seeding PlayBeat database with REAL CSV products + projectors...')
 
   // 1. Admin user
   const hashedPassword = await bcrypt.hash(ADMIN_PASSWORD, 10)
@@ -85,7 +106,30 @@ async function main() {
       },
     })
   }
-  console.log(`✅ ${PRODUCTS_JSON.length} real products imported`)
+  console.log(`✅ ${PRODUCTS_JSON.length} digital products imported`)
+
+  // 2b. Smart projectors (with real images)
+  for (const p of PROJECTORS_JSON) {
+    await db.product.create({
+      data: {
+        sku: p.sku,
+        name: p.name,
+        description: p.description,
+        category: p.category,
+        price: p.priceUSD,
+        currency: 'USD',
+        originalPrice: p.originalPrice,
+        originalCurrency: p.originalCurrency,
+        region: p.region,
+        stock: p.stock,
+        status: p.status,
+        digital: p.digital,
+        tags: p.tags,
+        image: p.imageUrl || null,
+      },
+    })
+  }
+  console.log(`✅ ${PROJECTORS_JSON.length} smart projectors imported (with images)`)
 
   // 3. Settings
   await db.setting.upsert({
