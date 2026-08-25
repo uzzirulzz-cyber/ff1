@@ -39,8 +39,11 @@ interface Product {
   name: string
   description?: string | null
   category?: string | null
-  price: number
-  currency: string
+  price: number // USD base
+  currency: string // always "USD"
+  originalPrice?: number | null
+  originalCurrency?: string | null
+  region?: string | null
   stock: number
   status: string
   digital: boolean
@@ -370,8 +373,15 @@ export default function ProductsPage() {
                             <td className="px-4 py-3 text-slate-300">
                               {p.category || '—'}
                             </td>
-                            <td className="px-4 py-3 text-right font-mono font-semibold text-white">
-                              {p.currency} {p.price.toLocaleString()}
+                            <td className="px-4 py-3 text-right">
+                              <div className="font-mono text-sm font-semibold text-white">
+                                ${p.price.toFixed(2)}
+                              </div>
+                              {p.originalCurrency && p.originalCurrency !== 'USD' && (
+                                <div className="font-mono text-[10px] text-slate-500">
+                                  {p.originalCurrency} {p.originalPrice?.toLocaleString()}
+                                </div>
+                              )}
                             </td>
                             <td className="px-4 py-3 text-right text-slate-300">
                               {p.stock}
@@ -659,8 +669,10 @@ function ProductFormDialog({
     name: '',
     description: '',
     category: '',
-    price: '',
-    currency: 'Rs',
+    price: '', // USD base
+    originalPrice: '', // source currency
+    originalCurrency: 'USD',
+    region: '',
     stock: '0',
     status: 'active',
     image: '',
@@ -678,7 +690,9 @@ function ProductFormDialog({
         description: product.description || '',
         category: product.category || '',
         price: String(product.price),
-        currency: product.currency || 'Rs',
+        originalPrice: product.originalPrice ? String(product.originalPrice) : '',
+        originalCurrency: product.originalCurrency || 'USD',
+        region: product.region || '',
         stock: String(product.stock),
         status: product.status,
         image: product.image || '',
@@ -692,7 +706,9 @@ function ProductFormDialog({
         description: '',
         category: '',
         price: '',
-        currency: 'Rs',
+        originalPrice: '',
+        originalCurrency: 'USD',
+        region: '',
         stock: '0',
         status: 'active',
         image: '',
@@ -708,14 +724,23 @@ function ProductFormDialog({
     setSaving(true)
     setError(null)
     try {
+      const price = Number(form.price) || 0
       const payload = {
-        ...form,
-        price: Number(form.price) || 0,
+        sku: form.sku,
+        name: form.name,
+        description: form.description,
+        category: form.category,
+        price,
+        originalPrice: form.originalPrice ? Number(form.originalPrice) : price,
+        originalCurrency: form.originalCurrency || 'USD',
+        region: form.region || null,
         stock: Number(form.stock) || 0,
+        status: form.status,
+        digital: form.digital,
+        image: form.image,
         tags: form.tags
           ? form.tags.split(/[,;]/).map((t) => t.trim()).filter(Boolean)
           : [],
-        digital: form.digital,
       }
       const url = isEdit ? `/api/products/${product!.id}` : '/api/products'
       const method = isEdit ? 'PUT' : 'POST'
@@ -797,7 +822,7 @@ function ProductFormDialog({
               className="input resize-none"
             />
           </Field>
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-2 gap-3">
             <Field label="Category">
               <input
                 value={form.category}
@@ -806,27 +831,54 @@ function ProductFormDialog({
                 className="input"
               />
             </Field>
-            <Field label="Price *">
+            <Field label="Region">
+              <input
+                value={form.region}
+                onChange={(e) => setForm({ ...form, region: e.target.value })}
+                placeholder="US / EU / UK / Global"
+                className="input"
+              />
+            </Field>
+          </div>
+          <div className="grid grid-cols-3 gap-3">
+            <Field label="Selling Price (USD) *">
               <input
                 required
                 type="number"
                 step="0.01"
                 value={form.price}
                 onChange={(e) => setForm({ ...form, price: e.target.value })}
-                placeholder="24000"
+                placeholder="31.20"
                 className="input"
               />
             </Field>
-            <Field label="Currency">
+            <Field label="Original Price">
+              <input
+                type="number"
+                step="0.01"
+                value={form.originalPrice}
+                onChange={(e) => setForm({ ...form, originalPrice: e.target.value })}
+                placeholder="31.20"
+                className="input"
+              />
+            </Field>
+            <Field label="Original Currency">
               <select
-                value={form.currency}
-                onChange={(e) => setForm({ ...form, currency: e.target.value })}
+                value={form.originalCurrency}
+                onChange={(e) => setForm({ ...form, originalCurrency: e.target.value })}
                 className="input"
               >
-                <option value="Rs">Rs</option>
-                <option value="$">$</option>
-                <option value="€">€</option>
-                <option value="£">£</option>
+                <option value="USD">USD</option>
+                <option value="EUR">EUR</option>
+                <option value="GBP">GBP</option>
+                <option value="AED">AED</option>
+                <option value="PKR">PKR</option>
+                <option value="TRY">TRY</option>
+                <option value="JPY">JPY</option>
+                <option value="AUD">AUD</option>
+                <option value="BRL">BRL</option>
+                <option value="COP">COP</option>
+                <option value="MXN">MXN</option>
               </select>
             </Field>
           </div>

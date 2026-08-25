@@ -29,8 +29,11 @@ model Product {
   name        String
   description String?
   category    String?
-  price       Float
-  currency    String   @default("Rs")
+  price       Float // USD base price
+  currency    String   @default("USD") // base currency — always USD
+  originalPrice Float? // original source price (e.g., 60 EUR)
+  originalCurrency String? // original source currency (USD/EUR/GBP/TRY/JPY/AUD/BRL/COP/MXN)
+  region      String? // US/EU/UK/Global etc.
   stock       Int      @default(0)
   status      String   @default("active") // active | draft | archived
   image       String?

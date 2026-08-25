@@ -78,8 +78,11 @@ export async function POST(req: NextRequest) {
       name,
       description: body?.description ? String(body.description) : null,
       category: body?.category ? String(body.category) : null,
-      price,
-      currency: body?.currency ? String(body.currency) : 'Rs',
+      price, // USD base
+      currency: 'USD', // always USD base
+      originalPrice: body?.originalPrice ? Number(body.originalPrice) : price,
+      originalCurrency: body?.originalCurrency ? String(body.originalCurrency) : 'USD',
+      region: body?.region ? String(body.region) : null,
       stock: Number(body?.stock || 0),
       status: body?.status ? String(body.status) : 'active',
       digital: Boolean(body?.digital ?? true),

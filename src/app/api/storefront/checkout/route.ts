@@ -67,7 +67,7 @@ export async function POST(req: NextRequest) {
       customerEmail,
       items: itemRows,
       total,
-      currency: 'Rs',
+      currency: 'USD',
       status: 'pending',
       paymentMethod,
     },

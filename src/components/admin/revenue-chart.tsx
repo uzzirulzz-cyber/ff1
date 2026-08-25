@@ -82,7 +82,7 @@ export function RevenueChart({ data }: RevenueChartProps) {
       <div className="mt-5 flex items-end gap-3">
         <div>
           <div className="font-mono text-3xl font-bold tracking-tight text-white">
-            Rs {total.toLocaleString()}
+            ${total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </div>
           <div className="mt-1 flex items-center gap-1.5 text-xs">
             <span className="inline-flex items-center gap-0.5 rounded-full bg-emerald-500/10 px-1.5 py-0.5 font-semibold text-emerald-400">
@@ -95,7 +95,7 @@ export function RevenueChart({ data }: RevenueChartProps) {
           <span className="h-2 w-2 rounded-full bg-yellow-400" />
           <span className="text-slate-400">Total</span>
           <span className="font-mono font-semibold text-yellow-400">
-            Rs {total.toLocaleString()}
+            ${total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </span>
         </div>
       </div>
@@ -136,7 +136,7 @@ export function RevenueChart({ data }: RevenueChartProps) {
                 boxShadow: '0 12px 40px -8px rgba(0,0,0,0.6)',
               }}
               labelStyle={{ color: '#94a3b8', marginBottom: 4 }}
-              formatter={(v: number) => [`Rs ${v.toLocaleString()}`, 'Revenue']}
+              formatter={(v: number) => [`$${v.toLocaleString()}`, 'Revenue']}
             />
             <Area
               type="monotone"

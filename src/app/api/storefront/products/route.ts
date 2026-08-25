@@ -15,20 +15,24 @@ export async function GET(req: NextRequest) {
       { name: { contains: search, mode: 'insensitive' } },
       { description: { contains: search, mode: 'insensitive' } },
       { sku: { contains: search, mode: 'insensitive' } },
+      { tags: { has: search.toLowerCase() } },
     ]
   }
 
   const products = await db.product.findMany({
     where,
-    orderBy: { createdAt: 'desc' },
+    orderBy: [{ category: 'asc' }, { sku: 'asc' }],
     select: {
       id: true,
       sku: true,
       name: true,
       description: true,
       category: true,
-      price: true,
-      currency: true,
+      price: true, // USD base
+      currency: true, // always "USD"
+      originalPrice: true,
+      originalCurrency: true,
+      region: true,
       stock: true,
       image: true,
       tags: true,

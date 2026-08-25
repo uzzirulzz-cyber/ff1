@@ -82,7 +82,7 @@ function parseRow(row: Record<string, unknown>): ParsedRow | null {
     description: row.description ? String(row.description) : null,
     category: row.category ? String(row.category) : null,
     price,
-    currency: row.currency ? String(row.currency).trim() : 'Rs',
+    currency: 'USD',
     stock: Number(row.stock || 0) || 0,
     status: row.status ? String(row.status).trim().toLowerCase() : 'active',
     image: row.image ? String(row.image) : null,

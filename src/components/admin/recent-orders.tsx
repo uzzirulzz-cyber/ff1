@@ -17,11 +17,11 @@ interface RecentOrdersProps {
 }
 
 const FALLBACK: Order[] = [
-  { id: '#PB-00024', customer: 'John Doe', amount: 'Rs 2,499', status: 'Completed' },
-  { id: '#PB-00023', customer: 'Sarah Smith', amount: 'Rs 1,499', status: 'Completed' },
-  { id: '#PB-00022', customer: 'Mike Johnson', amount: 'Rs 1,299', status: 'Completed' },
-  { id: '#PB-00021', customer: 'Emma Wilson', amount: 'Rs 3,200', status: 'Processing' },
-  { id: '#PB-00020', customer: 'David Brown', amount: 'Rs 899', status: 'Pending' },
+  { id: '#PB-00024', customer: 'John Doe', amount: '$31.20', status: 'Completed' },
+  { id: '#PB-00023', customer: 'Sarah Smith', amount: '$8.92', status: 'Completed' },
+  { id: '#PB-00022', customer: 'Mike Johnson', amount: '$1.95', status: 'Completed' },
+  { id: '#PB-00021', customer: 'Emma Wilson', amount: '$24.57', status: 'Processing' },
+  { id: '#PB-00020', customer: 'David Brown', amount: '$1.43', status: 'Pending' },
 ]
 
 const STATUS_STYLES: Record<string, string> = {

@@ -13,9 +13,9 @@ export interface Product {
 }
 
 const FALLBACK: Product[] = [
-  { rank: 1, title: 'PlayStation Gift Card - $50 (USA)', sales: 12, hot: true, price: 'Rs 24,000', color: '#facc15' },
-  { rank: 2, title: 'PlayStation Gift Card - $25 (USA)', sales: 8, hot: true, price: 'Rs 14,000', color: '#cbd5e1' },
-  { rank: 3, title: 'Netflix Premium 1 Month', sales: 5, hot: false, price: 'Rs 6,800', color: '#d97706' },
+  { rank: 1, title: 'Cursor AI Pro Subscription 1 Month', sales: 12, hot: true, price: '$31.20', color: '#facc15' },
+  { rank: 2, title: 'CapCut Pro Subscription 1 Month (US)', sales: 8, hot: true, price: '$11.70', color: '#cbd5e1' },
+  { rank: 3, title: 'NFLX Gift Card USD 25 (US)', sales: 5, hot: false, price: '$32.50', color: '#d97706' },
 ]
 
 export function TopProducts({ products = FALLBACK }: { products?: Product[] }) {

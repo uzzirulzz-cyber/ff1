@@ -27,6 +27,12 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
+import {
+  formatPrice,
+  type CurrencyCode,
+  SUPPORTED_CURRENCIES,
+  CURRENCY_LABELS,
+} from '@/lib/currency'
 
 interface StoreProduct {
   id: string
@@ -34,8 +40,11 @@ interface StoreProduct {
   name: string
   description?: string | null
   category?: string | null
-  price: number
+  price: number // USD base
   currency: string
+  originalPrice?: number | null
+  originalCurrency?: string | null
+  region?: string | null
   stock: number
   image?: string | null
   tags: string[]
@@ -45,6 +54,9 @@ interface StoreProduct {
 interface CartItem extends StoreProduct {
   qty: number
 }
+
+const CART_STORAGE_KEY = 'pb_cart_v2'
+const CURRENCY_STORAGE_KEY = 'pb_currency'
 
 export default function StorefrontPage() {
   const [products, setProducts] = useState<StoreProduct[]>([])
@@ -57,6 +69,26 @@ export default function StorefrontPage() {
   const [checkoutOpen, setCheckoutOpen] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [confirmation, setConfirmation] = useState<{ orderNumber: string; total: number } | null>(null)
+  const [currency, setCurrency] = useState<CurrencyCode>('PKR')
+  const [currencyOpen, setCurrencyOpen] = useState(false)
+
+  // Load currency preference
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(CURRENCY_STORAGE_KEY) as CurrencyCode | null
+      if (saved && SUPPORTED_CURRENCIES.includes(saved)) setCurrency(saved)
+    } catch {
+      // ignore
+    }
+  }, [])
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(CURRENCY_STORAGE_KEY, currency)
+    } catch {
+      // ignore
+    }
+  }, [currency])
 
   const fetchProducts = useCallback(async () => {
     setLoading(true)
@@ -84,7 +116,7 @@ export default function StorefrontPage() {
   // Load cart from localStorage
   useEffect(() => {
     try {
-      const raw = localStorage.getItem('pb_cart')
+      const raw = localStorage.getItem(CART_STORAGE_KEY)
       if (raw) setCart(JSON.parse(raw))
     } catch {
       // ignore
@@ -93,13 +125,13 @@ export default function StorefrontPage() {
 
   useEffect(() => {
     try {
-      localStorage.setItem('pb_cart', JSON.stringify(cart))
+      localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart))
     } catch {
       // ignore
     }
   }, [cart])
 
-  const cartTotal = cart.reduce((s, c) => s + c.price * c.qty, 0)
+  const cartTotalUSD = cart.reduce((s, c) => s + c.price * c.qty, 0)
   const cartCount = cart.reduce((s, c) => s + c.qty, 0)
 
   function addToCart(p: StoreProduct) {
@@ -112,7 +144,7 @@ export default function StorefrontPage() {
       }
       return [...prev, { ...p, qty: 1 }]
     })
-    toast.success(`${p.name} added to cart`)
+    toast.success(`${p.name.slice(0, 40)}${p.name.length > 40 ? '...' : ''} added to cart`)
   }
 
   function updateQty(id: string, delta: number) {
@@ -187,11 +219,49 @@ export default function StorefrontPage() {
           </Link>
 
           <div className="flex items-center gap-2">
+            {/* Currency switcher */}
+            <div className="relative">
+              <button
+                onClick={() => setCurrencyOpen((v) => !v)}
+                className="flex items-center gap-1.5 rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs font-semibold text-white transition hover:bg-white/10"
+              >
+                <span className="text-yellow-400">{currency}</span>
+                <span className="hidden sm:inline">▾</span>
+              </button>
+              {currencyOpen && (
+                <>
+                  <div
+                    className="fixed inset-0 z-40"
+                    onClick={() => setCurrencyOpen(false)}
+                  />
+                  <div className="absolute right-0 z-50 mt-2 w-56 overflow-hidden rounded-xl border border-white/10 bg-[#0f172a] py-1 shadow-2xl">
+                    {SUPPORTED_CURRENCIES.map((c) => (
+                      <button
+                        key={c}
+                        onClick={() => {
+                          setCurrency(c)
+                          setCurrencyOpen(false)
+                          toast.success(`Currency: ${c}`)
+                        }}
+                        className={cn(
+                          'flex w-full items-center justify-between px-3 py-2 text-xs transition hover:bg-white/5',
+                          currency === c ? 'text-yellow-400' : 'text-slate-300'
+                        )}
+                      >
+                        <span>{CURRENCY_LABELS[c]}</span>
+                        {currency === c && <CheckCircle2 className="h-3.5 w-3.5" />}
+                      </button>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
+
             <a
               href="/login"
               className="hidden items-center gap-1.5 rounded-xl border border-white/10 bg-white/5 px-3.5 py-2 text-sm font-medium text-slate-200 transition hover:bg-white/10 sm:flex"
             >
-              Admin Login
+              Admin
               <ExternalLink className="h-3.5 w-3.5" />
             </a>
             <button
@@ -224,7 +294,7 @@ export default function StorefrontPage() {
               <span className="text-gradient-gold">delivered instantly.</span>
             </h1>
             <p className="mt-4 max-w-md text-base text-slate-400">
-              Gift cards, streaming subscriptions, IPTV, VPN & more.
+              AI subscriptions, gift cards, IPTV, streaming accounts, email accounts & more.
               Pay securely and receive your codes within minutes.
             </p>
             <div className="mt-6 flex flex-wrap items-center gap-3">
@@ -235,7 +305,7 @@ export default function StorefrontPage() {
                 Browse Products
                 <ArrowRight className="h-4 w-4" />
               </a>
-              <div className="flex items-center gap-4 text-xs text-slate-400">
+              <div className="flex flex-wrap items-center gap-3 text-xs text-slate-400">
                 <span className="flex items-center gap-1">
                   <Shield className="h-3.5 w-3.5 text-emerald-400" />
                   Secure Checkout
@@ -285,7 +355,7 @@ export default function StorefrontPage() {
               className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white outline-none transition focus:border-yellow-400/40"
             >
               <option value="all">All Categories</option>
-              {categories.map((c) => (
+              {categories.sort().map((c) => (
                 <option key={c} value={c}>{c}</option>
               ))}
             </select>
@@ -306,59 +376,75 @@ export default function StorefrontPage() {
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {products.map((p) => (
-              <div
-                key={p.id}
-                className="group flex flex-col overflow-hidden rounded-2xl border border-white/5 bg-white/[0.03] transition hover:bg-white/[0.06] hover:shadow-lg hover:shadow-yellow-500/5"
-              >
-                {/* Image / placeholder */}
-                <div className="relative grid aspect-video place-items-center overflow-hidden bg-gradient-to-br from-slate-700/30 to-slate-800/50">
-                  {p.image ? (
-                    <img src={p.image} alt={p.name} className="h-full w-full object-cover" />
-                  ) : (
-                    <div className="grid h-16 w-16 place-items-center rounded-2xl bg-white/5">
-                      <Tag className="h-7 w-7 text-slate-400" />
-                    </div>
-                  )}
-                  {p.digital && (
-                    <span className="absolute right-2 top-2 rounded-full bg-emerald-500/20 px-2 py-0.5 text-[10px] font-bold text-emerald-300 backdrop-blur-md">
-                      DIGITAL
-                    </span>
-                  )}
-                </div>
-
-                {/* Body */}
-                <div className="flex flex-1 flex-col p-4">
-                  <div className="text-[10px] font-semibold uppercase tracking-wide text-yellow-400">
-                    {p.category || 'Digital'}
-                  </div>
-                  <h3 className="mt-1 line-clamp-2 text-sm font-semibold text-white">
-                    {p.name}
-                  </h3>
-                  <p className="mt-1 line-clamp-2 text-xs text-slate-400">
-                    {p.description || 'Premium digital product with instant delivery.'}
-                  </p>
-
-                  <div className="mt-3 flex items-center justify-between">
-                    <div className="font-mono text-lg font-bold text-white">
-                      {p.currency} {p.price.toLocaleString()}
-                    </div>
-                    <span className="text-[10px] text-slate-400">
-                      {p.stock > 0 ? `${p.stock} in stock` : 'Sold out'}
-                    </span>
+            {products.map((p) => {
+              // Show original price (if non-USD) + display price (in selected currency)
+              const showOriginal = p.originalCurrency && p.originalCurrency !== 'USD'
+              return (
+                <div
+                  key={p.id}
+                  className="group flex flex-col overflow-hidden rounded-2xl border border-white/5 bg-white/[0.03] transition hover:bg-white/[0.06] hover:shadow-lg hover:shadow-yellow-500/5"
+                >
+                  {/* Image / placeholder */}
+                  <div className="relative grid aspect-video place-items-center overflow-hidden bg-gradient-to-br from-slate-700/30 to-slate-800/50">
+                    {p.image ? (
+                      <img src={p.image} alt={p.name} className="h-full w-full object-cover" />
+                    ) : (
+                      <div className="grid h-16 w-16 place-items-center rounded-2xl bg-white/5">
+                        <Tag className="h-7 w-7 text-slate-400" />
+                      </div>
+                    )}
+                    {p.digital && (
+                      <span className="absolute right-2 top-2 rounded-full bg-emerald-500/20 px-2 py-0.5 text-[10px] font-bold text-emerald-300 backdrop-blur-md">
+                        DIGITAL
+                      </span>
+                    )}
+                    {p.region && (
+                      <span className="absolute left-2 top-2 rounded-full bg-blue-500/20 px-2 py-0.5 text-[10px] font-bold text-blue-300 backdrop-blur-md">
+                        {p.region}
+                      </span>
+                    )}
                   </div>
 
-                  <button
-                    onClick={() => addToCart(p)}
-                    disabled={p.stock <= 0}
-                    className="mt-3 inline-flex items-center justify-center gap-1.5 rounded-xl bg-gradient-to-r from-yellow-300 to-amber-500 py-2 text-xs font-bold text-slate-950 shadow-lg shadow-yellow-500/20 transition hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-40"
-                  >
-                    <ShoppingCart className="h-3.5 w-3.5" />
-                    Add to Cart
-                  </button>
+                  {/* Body */}
+                  <div className="flex flex-1 flex-col p-4">
+                    <div className="text-[10px] font-semibold uppercase tracking-wide text-yellow-400">
+                      {p.category || 'Digital'}
+                    </div>
+                    <h3 className="mt-1 line-clamp-2 text-sm font-semibold text-white" title={p.name}>
+                      {p.name}
+                    </h3>
+                    <p className="mt-1 line-clamp-2 text-xs text-slate-400">
+                      SKU: <span className="font-mono">{p.sku}</span>
+                    </p>
+
+                    <div className="mt-3 flex items-end justify-between">
+                      <div>
+                        <div className="font-mono text-lg font-bold text-white">
+                          {formatPrice(p.price, currency)}
+                        </div>
+                        {showOriginal && (
+                          <div className="mt-0.5 text-[10px] text-slate-500">
+                            Original: {p.originalCurrency} {p.originalPrice?.toLocaleString()}
+                          </div>
+                        )}
+                      </div>
+                      <span className="text-[10px] text-slate-400">
+                        {p.stock > 0 ? `${p.stock} in stock` : 'Sold out'}
+                      </span>
+                    </div>
+
+                    <button
+                      onClick={() => addToCart(p)}
+                      disabled={p.stock <= 0}
+                      className="mt-3 inline-flex items-center justify-center gap-1.5 rounded-xl bg-gradient-to-r from-yellow-300 to-amber-500 py-2 text-xs font-bold text-slate-950 shadow-lg shadow-yellow-500/20 transition hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-40"
+                    >
+                      <ShoppingCart className="h-3.5 w-3.5" />
+                      Add to Cart
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
         )}
       </section>
@@ -385,7 +471,8 @@ export default function StorefrontPage() {
         open={cartOpen}
         onOpenChange={setCartOpen}
         cart={cart}
-        total={cartTotal}
+        currency={currency}
+        totalUSD={cartTotalUSD}
         onUpdateQty={updateQty}
         onRemove={removeItem}
         onCheckout={() => {
@@ -398,7 +485,8 @@ export default function StorefrontPage() {
       <CheckoutDialog
         open={checkoutOpen}
         onOpenChange={setCheckoutOpen}
-        total={cartTotal}
+        totalUSD={cartTotalUSD}
+        currency={currency}
         submitting={submitting}
         onCheckout={handleCheckout}
       />
@@ -424,9 +512,9 @@ export default function StorefrontPage() {
               </span>
             </div>
             <div className="mt-2 flex items-center justify-between text-sm">
-              <span className="text-slate-400">Total</span>
+              <span className="text-slate-400">Total (USD)</span>
               <span className="font-mono font-bold text-white">
-                Rs {confirmation?.total.toLocaleString()}
+                $ {confirmation?.total.toLocaleString()}
               </span>
             </div>
           </div>
@@ -449,7 +537,8 @@ function CartDrawer({
   open,
   onOpenChange,
   cart,
-  total,
+  currency,
+  totalUSD,
   onUpdateQty,
   onRemove,
   onCheckout,
@@ -457,7 +546,8 @@ function CartDrawer({
   open: boolean
   onOpenChange: (v: boolean) => void
   cart: CartItem[]
-  total: number
+  currency: CurrencyCode
+  totalUSD: number
   onUpdateQty: (id: string, delta: number) => void
   onRemove: (id: string) => void
   onCheckout: () => void
@@ -511,14 +601,14 @@ function CartDrawer({
                   className="flex items-center gap-3 rounded-xl border border-white/5 bg-white/[0.02] p-3"
                 >
                   <div className="grid h-12 w-12 shrink-0 place-items-center overflow-hidden rounded-lg bg-gradient-to-br from-slate-700 to-slate-800 text-[10px] font-bold text-slate-300">
-                    {c.name.split(' ')[0].slice(0, 2).toUpperCase()}
+                    {c.sku.slice(0, 6)}
                   </div>
                   <div className="min-w-0 flex-1">
-                    <div className="truncate text-sm font-medium text-white">
+                    <div className="line-clamp-2 text-xs font-medium text-white" title={c.name}>
                       {c.name}
                     </div>
                     <div className="mt-0.5 font-mono text-xs text-yellow-400">
-                      {c.currency} {c.price.toLocaleString()}
+                      {formatPrice(c.price, currency)} × {c.qty}
                     </div>
                   </div>
                   <div className="flex items-center gap-1">
@@ -553,9 +643,9 @@ function CartDrawer({
         {cart.length > 0 && (
           <div className="border-t border-white/5 p-4">
             <div className="mb-3 flex items-center justify-between text-sm">
-              <span className="text-slate-400">Total</span>
+              <span className="text-slate-400">Total ({currency})</span>
               <span className="font-mono text-xl font-bold text-white">
-                Rs {total.toLocaleString()}
+                {formatPrice(totalUSD, currency)}
               </span>
             </div>
             <button
@@ -575,13 +665,15 @@ function CartDrawer({
 function CheckoutDialog({
   open,
   onOpenChange,
-  total,
+  totalUSD,
+  currency,
   submitting,
   onCheckout,
 }: {
   open: boolean
   onOpenChange: (v: boolean) => void
-  total: number
+  totalUSD: number
+  currency: CurrencyCode
   submitting: boolean
   onCheckout: (name: string, email: string) => void
 }) {
@@ -626,10 +718,14 @@ function CheckoutDialog({
           </div>
           <div className="rounded-xl border border-white/10 bg-white/5 p-3">
             <div className="flex items-center justify-between text-sm">
-              <span className="text-slate-400">Total</span>
+              <span className="text-slate-400">Total ({currency})</span>
               <span className="font-mono text-lg font-bold text-white">
-                Rs {total.toLocaleString()}
+                {formatPrice(totalUSD, currency)}
               </span>
+            </div>
+            <div className="mt-1 flex items-center justify-between text-[11px] text-slate-500">
+              <span>USD equivalent:</span>
+              <span className="font-mono">$ {totalUSD.toFixed(2)}</span>
             </div>
           </div>
           <DialogFooter>
@@ -653,7 +749,7 @@ function CheckoutDialog({
                 </>
               ) : (
                 <>
-                  Place Order · Rs {total.toLocaleString()}
+                  Place Order · {formatPrice(totalUSD, currency)}
                 </>
               )}
             </Button>

@@ -167,7 +167,7 @@ export default function AdminDashboard() {
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
                   <StatCard
                     title="Total Revenue"
-                    value={`Rs ${data.stats.totalRevenue.toLocaleString()}`}
+                    value={`$${data.stats.totalRevenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
                     delta="+18.4%"
                     deltaPositive
                     subtext="vs last 7 days"
