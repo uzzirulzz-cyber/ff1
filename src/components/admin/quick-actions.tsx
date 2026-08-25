@@ -1,67 +1,107 @@
 'use client'
 
-import { Plus, Megaphone, Store, ShoppingCart, Headphones, type LucideIcon } from 'lucide-react'
+import {
+  Package,
+  ShoppingCart,
+  FileBarChart,
+  Users,
+  Tag,
+  Settings,
+  type LucideIcon,
+} from 'lucide-react'
 import { cn } from '@/lib/utils'
 
-interface Action {
+interface QuickAction {
   label: string
+  desc: string
   icon: LucideIcon
-  tint: string
+  color: string
+  bg: string
+  glow: string
 }
 
-const ACTIONS: Action[] = [
-  { label: 'Add Product', icon: Plus, tint: 'emerald' },
-  { label: 'Send Campaign', icon: Megaphone, tint: 'purple' },
-  { label: 'View Store', icon: Store, tint: 'blue' },
-  { label: 'Manage Orders', icon: ShoppingCart, tint: 'orange' },
-  { label: 'Support Tickets', icon: Headphones, tint: 'cyan' },
+const ACTIONS: QuickAction[] = [
+  {
+    label: 'Add Product',
+    desc: 'Add new SKU',
+    icon: Package,
+    color: 'text-emerald-400',
+    bg: 'bg-emerald-500/10',
+    glow: 'group-hover:shadow-emerald-500/20',
+  },
+  {
+    label: 'Create Order',
+    desc: 'Manual order',
+    icon: ShoppingCart,
+    color: 'text-blue-400',
+    bg: 'bg-blue-500/10',
+    glow: 'group-hover:shadow-blue-500/20',
+  },
+  {
+    label: 'View Reports',
+    desc: 'Analytics',
+    icon: FileBarChart,
+    color: 'text-purple-400',
+    bg: 'bg-purple-500/10',
+    glow: 'group-hover:shadow-purple-500/20',
+  },
+  {
+    label: 'Manage Users',
+    desc: 'Staff accounts',
+    icon: Users,
+    color: 'text-yellow-400',
+    bg: 'bg-yellow-400/10',
+    glow: 'group-hover:shadow-yellow-500/20',
+  },
+  {
+    label: 'Discounts',
+    desc: 'Coupons & promos',
+    icon: Tag,
+    color: 'text-cyan-400',
+    bg: 'bg-cyan-500/10',
+    glow: 'group-hover:shadow-cyan-500/20',
+  },
+  {
+    label: 'Settings',
+    desc: 'System config',
+    icon: Settings,
+    color: 'text-slate-300',
+    bg: 'bg-white/5',
+    glow: 'group-hover:shadow-slate-500/20',
+  },
 ]
-
-const TINTS: Record<string, string> = {
-  emerald: 'hover:bg-emerald-500/10 hover:border-emerald-500/30 hover:text-emerald-300',
-  purple: 'hover:bg-purple-500/10 hover:border-purple-500/30 hover:text-purple-300',
-  blue: 'hover:bg-blue-500/10 hover:border-blue-500/30 hover:text-blue-300',
-  orange: 'hover:bg-orange-500/10 hover:border-orange-500/30 hover:text-orange-300',
-  cyan: 'hover:bg-cyan-500/10 hover:border-cyan-500/30 hover:text-cyan-300',
-}
-
-const ICON_TINTS: Record<string, string> = {
-  emerald: 'bg-emerald-500/15 text-emerald-400',
-  purple: 'bg-purple-500/15 text-purple-400',
-  blue: 'bg-blue-500/15 text-blue-400',
-  orange: 'bg-orange-500/15 text-orange-400',
-  cyan: 'bg-cyan-500/15 text-cyan-400',
-}
 
 export function QuickActions() {
   return (
     <div className="rounded-2xl border border-white/5 bg-white/[0.03] p-5 backdrop-blur-md">
-      <div className="flex flex-wrap items-center justify-between gap-3">
+      <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-sm font-semibold text-white">Quick Actions</h3>
-          <p className="mt-0.5 text-xs text-slate-400">
-            Everything you need, one click away
-          </p>
+          <h3 className="text-base font-bold text-white">Quick Actions &amp; Shortcuts</h3>
+          <p className="mt-0.5 text-xs text-slate-400">Common tasks, one click away</p>
         </div>
       </div>
-      <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+
+      <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
         {ACTIONS.map((a) => (
           <button
             key={a.label}
             className={cn(
-              'group flex items-center gap-3 rounded-xl border border-white/5 bg-white/[0.02] p-3 text-left text-slate-300 transition',
-              TINTS[a.tint]
+              'group flex items-center gap-3 rounded-xl border border-white/5 bg-white/[0.02] p-3 text-left transition hover:bg-white/[0.06] hover:pb-shadow-lg',
+              a.glow
             )}
           >
             <div
               className={cn(
-                'grid h-9 w-9 shrink-0 place-items-center rounded-lg transition',
-                ICON_TINTS[a.tint]
+                'grid h-10 w-10 shrink-0 place-items-center rounded-xl transition group-hover:scale-110',
+                a.bg
               )}
             >
-              <a.icon className="h-[18px] w-[18px]" />
+              <a.icon className={cn('h-5 w-5', a.color)} />
             </div>
-            <span className="text-xs font-medium leading-tight">{a.label}</span>
+            <div className="min-w-0">
+              <div className="truncate text-sm font-medium text-white">{a.label}</div>
+              <div className="truncate text-[10px] text-slate-500">{a.desc}</div>
+            </div>
           </button>
         ))}
       </div>

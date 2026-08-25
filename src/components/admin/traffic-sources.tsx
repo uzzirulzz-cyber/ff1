@@ -3,30 +3,10 @@
 import { BarChart3, ChevronDown, ArrowRight } from 'lucide-react'
 
 const SOURCES = [
-  {
-    name: 'Direct / URL',
-    percent: 52,
-    visits: 1492,
-    color: '#3b82f6',
-  },
-  {
-    name: 'TikTok Leads & Pixel',
-    percent: 28,
-    visits: 832,
-    color: '#a855f7',
-  },
-  {
-    name: 'Google Search',
-    percent: 14,
-    visits: 481,
-    color: '#10b981',
-  },
-  {
-    name: 'Affiliate Referrals',
-    percent: 6,
-    visits: 172,
-    color: '#facc15',
-  },
+  { name: 'Direct / URL', percent: 52, visits: 1492, color: '#3b82f6' },
+  { name: 'TikTok Leads & Pixel', percent: 28, visits: 832, color: '#a855f7' },
+  { name: 'Organic Google Search', percent: 14, visits: 481, color: '#10b981' },
+  { name: 'Affiliate Referrals', percent: 6, visits: 172, color: '#facc15' },
 ]
 
 export function TrafficSources() {
@@ -35,7 +15,7 @@ export function TrafficSources() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <BarChart3 className="h-4 w-4 text-purple-400" />
-          <h3 className="text-sm font-semibold text-white">Traffic Sources</h3>
+          <h3 className="text-base font-bold text-white">Traffic Sources</h3>
         </div>
         <button className="flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-slate-300 transition hover:bg-white/10">
           This Week
@@ -49,10 +29,8 @@ export function TrafficSources() {
             <div className="flex items-center justify-between text-xs">
               <span className="text-slate-300">{s.name}</span>
               <div className="flex items-center gap-2">
-                <span className="font-mono font-semibold text-white">
-                  {s.percent}%
-                </span>
-                <span className="text-slate-500">({s.visits})</span>
+                <span className="font-mono font-semibold text-white">{s.percent}%</span>
+                <span className="text-slate-500">({s.visits.toLocaleString()})</span>
               </div>
             </div>
             <div className="mt-2 h-2 overflow-hidden rounded-full bg-white/5">

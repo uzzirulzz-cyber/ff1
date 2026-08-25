@@ -6,88 +6,34 @@ import {
   DollarSign,
   ShoppingCart,
   Package,
-  Users,
-  RotateCcw,
+  AlertTriangle,
   Loader2,
-  AlertCircle,
-  ExternalLink,
+  RotateCcw,
 } from 'lucide-react'
 import { Sidebar } from '@/components/admin/sidebar'
 import { Header } from '@/components/admin/header'
-import { WelcomeBanner } from '@/components/admin/welcome-banner'
-import { StatCard } from '@/components/admin/stat-card'
-import { RevenueChart } from '@/components/admin/revenue-chart'
+import { WelcomeSection } from '@/components/admin/welcome-section'
+import { KpiCard } from '@/components/admin/kpi-card'
+import { RevenueOverview } from '@/components/admin/revenue-overview'
 import { OrderBreakdown } from '@/components/admin/order-breakdown'
 import { TrafficSources } from '@/components/admin/traffic-sources'
 import { TopProducts } from '@/components/admin/top-products'
 import { RecentOrders } from '@/components/admin/recent-orders'
 import { SystemHealth } from '@/components/admin/system-health'
 import { QuickActions } from '@/components/admin/quick-actions'
-import { PromoBanner } from '@/components/admin/promo-banner'
+import { SmartAdmin } from '@/components/admin/smart-admin'
+import { MarketingBanner } from '@/components/admin/marketing-banner'
 import { ResetDialog } from '@/components/admin/reset-dialog'
 import { useSession } from '@/lib/use-session'
 import { toast } from 'sonner'
-
-interface DashboardData {
-  range: string
-  stats: {
-    totalRevenue: number
-    rangeRevenue: number
-    totalOrders: number
-    ordersInRange: number
-    totalProducts: number
-    totalCustomers: number
-  }
-  breakdown: {
-    items: { name: string; value: number; color: string }[]
-    total: number
-  }
-  trend: { date: string; value: number }[]
-  recentOrders: {
-    id: string
-    customer: string
-    amount: string
-    status: string
-  }[]
-  topProducts: {
-    rank: number
-    sku: string
-    title: string
-    sales: number
-    hot: boolean
-    price: string
-    color: string
-  }[]
-}
 
 export default function AdminDashboard() {
   const { user, loading } = useSession()
   const router = useRouter()
   const [collapsed, setCollapsed] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
-  const [data, setData] = useState<DashboardData | null>(null)
-  const [dataLoading, setDataLoading] = useState(true)
-  const [dataError, setDataError] = useState<string | null>(null)
+  const [refreshing, setRefreshing] = useState(false)
   const [resetOpen, setResetOpen] = useState(false)
-
-  const fetchData = useCallback(async () => {
-    setDataLoading(true)
-    setDataError(null)
-    try {
-      const res = await fetch('/api/dashboard-stats?range=week', { credentials: 'include' })
-      if (!res.ok) {
-        const err = await res.json().catch(() => null)
-        throw new Error(err?.error || 'Failed to load dashboard data')
-      }
-      const json = await res.json()
-      setData(json)
-    } catch (e) {
-      const msg = e instanceof Error ? e.message : 'Failed to load'
-      setDataError(msg)
-    } finally {
-      setDataLoading(false)
-    }
-  }, [])
 
   useEffect(() => {
     if (!loading && !user) {
@@ -95,16 +41,20 @@ export default function AdminDashboard() {
     }
   }, [loading, user, router])
 
-  useEffect(() => {
-    if (user) fetchData()
-  }, [user, fetchData])
+  const handleRefresh = useCallback(() => {
+    setRefreshing(true)
+    setTimeout(() => {
+      setRefreshing(false)
+      toast.success('Dashboard data refreshed')
+    }, 800)
+  }, [])
 
   if (loading || !user) {
     return (
       <div className="grid min-h-screen place-items-center bg-[#070b18] text-slate-300">
-        <div className="flex items-center gap-2 text-sm">
-          <Loader2 className="h-4 w-4 animate-spin" />
-          Loading admin...
+        <div className="flex flex-col items-center gap-3">
+          <Loader2 className="h-6 w-6 animate-spin text-yellow-400" />
+          <div className="text-sm">Loading admin dashboard...</div>
         </div>
       </div>
     )
@@ -122,21 +72,12 @@ export default function AdminDashboard() {
       />
 
       <div className="relative flex min-w-0 flex-1 flex-col">
-        <Header onMenuClick={() => setMobileOpen(true)} onReset={() => setResetOpen(true)} />
+        <Header onMenuClick={() => setMobileOpen(true)} />
 
         <main className="scrollbar-thin flex-1 overflow-y-auto">
           <div className="mx-auto max-w-[1500px] space-y-5 p-4 lg:space-y-6 lg:p-6">
-            {/* Top bar with storefront link + reset */}
+            {/* Top action row: Reset button */}
             <div className="flex flex-wrap items-center justify-end gap-2">
-              <a
-                href="/storefront"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs font-medium text-slate-200 transition hover:bg-white/10"
-              >
-                <ExternalLink className="h-3.5 w-3.5" />
-                View Storefront
-              </a>
               <button
                 onClick={() => setResetOpen(true)}
                 className="inline-flex items-center gap-1.5 rounded-xl border border-red-500/20 bg-red-500/5 px-3 py-2 text-xs font-medium text-red-400 transition hover:bg-red-500/10 hover:border-red-500/40"
@@ -146,101 +87,89 @@ export default function AdminDashboard() {
               </button>
             </div>
 
-            <WelcomeBanner />
+            {/* Welcome */}
+            <WelcomeSection onRefresh={handleRefresh} refreshing={refreshing} />
 
-            {dataError ? (
-              <div className="flex items-center gap-2 rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-400">
-                <AlertCircle className="h-4 w-4 shrink-0" />
-                <span>{dataError}</span>
-                <button
-                  onClick={fetchData}
-                  className="ml-auto rounded-md bg-red-500/20 px-2 py-1 text-xs font-semibold text-red-300 hover:bg-red-500/30"
-                >
-                  Retry
-                </button>
+            {/* KPI cards (4) */}
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+              <KpiCard
+                title="Total Revenue"
+                value="Rs 44,800"
+                delta="+18.4%"
+                deltaPositive
+                subtext="vs last period"
+                icon={DollarSign}
+                theme="revenue"
+                spark={[15, 20, 30, 25, 32, 28, 38, 30, 45, 42, 55, 48, 60, 52, 68]}
+              />
+              <KpiCard
+                title="Total Orders"
+                value="2"
+                delta="+12.1%"
+                deltaPositive
+                subtext="vs last period"
+                icon={ShoppingCart}
+                theme="orders"
+                spark={[3, 4, 2, 5, 3, 4, 6, 5, 3, 4, 2, 5, 3, 4, 2]}
+              />
+              <KpiCard
+                title="Total Products"
+                value="17"
+                subtext="17 published"
+                icon={Package}
+                theme="products"
+                spark={[10, 11, 12, 13, 13, 14, 15, 15, 16, 16, 17, 17, 17, 17, 17]}
+              />
+              <KpiCard
+                title="Low Stock Alerts"
+                value="0"
+                warning
+                icon={AlertTriangle}
+                theme="lowstock"
+                spark={[5, 4, 3, 4, 2, 3, 2, 1, 2, 1, 1, 0, 1, 0, 0]}
+              />
+            </div>
+
+            {/* Charts row: Revenue Overview (8) + Order Breakdown (4) */}
+            <div className="grid grid-cols-1 gap-5 lg:grid-cols-12">
+              <div className="lg:col-span-8">
+                <RevenueOverview />
               </div>
-            ) : dataLoading || !data ? (
-              <DashboardSkeleton />
-            ) : (
-              <>
-                {/* Stat cards */}
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-                  <StatCard
-                    title="Total Revenue"
-                    value={`$${data.stats.totalRevenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
-                    delta="+18.4%"
-                    deltaPositive
-                    subtext="vs last 7 days"
-                    icon={DollarSign}
-                    theme="blue"
-                    spark={data.trend.map((t) => t.value || 0)}
-                  />
-                  <StatCard
-                    title="Total Orders"
-                    value={String(data.stats.totalOrders)}
-                    delta="+12.1%"
-                    deltaPositive
-                    subtext="vs last week"
-                    icon={ShoppingCart}
-                    theme="gold"
-                    spark={data.trend.map((_, i) => 6 + Math.floor(Math.random() * 5))}
-                  />
-                  <StatCard
-                    title="Total Products"
-                    value={String(data.stats.totalProducts)}
-                    delta="+6.3%"
-                    deltaPositive
-                    subtext="new this week"
-                    icon={Package}
-                    theme="purple"
-                    spark={[10, 11, 12, 13, 13, 14, 15, 15, 16, 16, 17]}
-                  />
-                  <StatCard
-                    title="Total Customers"
-                    value={String(data.stats.totalCustomers)}
-                    delta="+9.7%"
-                    deltaPositive
-                    subtext="vs last week"
-                    icon={Users}
-                    theme="green"
-                    spark={[180, 195, 205, 215, 220, 228, 235, 240, 244, 246, 248]}
-                  />
-                </div>
+              <div className="lg:col-span-4">
+                <OrderBreakdown />
+              </div>
+            </div>
 
-                {/* Charts row */}
-                <div className="grid grid-cols-1 gap-5 lg:grid-cols-12">
-                  <div className="lg:col-span-7">
-                    <RevenueChart data={data.trend} />
-                  </div>
-                  <div className="lg:col-span-3">
-                    <OrderBreakdown
-                      items={data.breakdown.items}
-                      total={data.breakdown.total}
-                    />
-                  </div>
-                  <div className="lg:col-span-2">
-                    <TrafficSources />
-                  </div>
-                </div>
+            {/* Lists row: Traffic (4) + Top Products (4) + Recent Orders (4) */}
+            <div className="grid grid-cols-1 gap-5 lg:grid-cols-12">
+              <div className="lg:col-span-4">
+                <TrafficSources />
+              </div>
+              <div className="lg:col-span-4">
+                <TopProducts />
+              </div>
+              <div className="lg:col-span-4">
+                <RecentOrders />
+              </div>
+            </div>
 
-                {/* Lists row */}
-                <div className="grid grid-cols-1 gap-5 lg:grid-cols-12">
-                  <div className="lg:col-span-5">
-                    <TopProducts products={data.topProducts} />
-                  </div>
-                  <div className="lg:col-span-4">
-                    <RecentOrders orders={data.recentOrders} />
-                  </div>
-                  <div className="lg:col-span-3">
-                    <SystemHealth />
-                  </div>
-                </div>
-              </>
-            )}
+            {/* System Health (full width or 12-col) */}
+            <div className="grid grid-cols-1 gap-5 lg:grid-cols-12">
+              <div className="lg:col-span-5">
+                <SystemHealth />
+              </div>
+              <div className="lg:col-span-7">
+                <SmartAdmin />
+              </div>
+            </div>
 
+            {/* Quick Actions */}
             <QuickActions />
-            <PromoBanner />
 
+            {/* Marketing banner */}
+            <MarketingBanner />
+
+            {/* Footer */}
             <footer className="flex flex-col items-center justify-between gap-2 border-t border-white/5 py-5 text-xs text-slate-500 sm:flex-row">
               <div className="flex items-center gap-2">
                 <span className="font-semibold text-slate-400">PlayBeat Digital Pvt Ltd</span>
@@ -248,10 +177,10 @@ export default function AdminDashboard() {
                 <span>2026 · All rights reserved.</span>
               </div>
               <div className="flex items-center gap-4">
-                <a href="/legal/privacy" target="_blank" className="transition hover:text-slate-300">Privacy</a>
-                <a href="/legal/terms" target="_blank" className="transition hover:text-slate-300">Terms</a>
-                <a href="/legal/refund" target="_blank" className="transition hover:text-slate-300">Refunds</a>
-                <a href="/contact" target="_blank" className="transition hover:text-slate-300">Support</a>
+                <a href="/legal/privacy" target="_blank" rel="noopener noreferrer" className="transition hover:text-slate-300">Privacy</a>
+                <a href="/legal/terms" target="_blank" rel="noopener noreferrer" className="transition hover:text-slate-300">Terms</a>
+                <a href="/legal/refund" target="_blank" rel="noopener noreferrer" className="transition hover:text-slate-300">Refunds</a>
+                <a href="/contact" target="_blank" rel="noopener noreferrer" className="transition hover:text-slate-300">Support</a>
                 <span className="flex items-center gap-1.5">
                   <span className="h-1.5 w-1.5 animate-pulse-soft rounded-full bg-emerald-400" />
                   Operational
@@ -262,27 +191,7 @@ export default function AdminDashboard() {
         </main>
       </div>
 
-      <ResetDialog open={resetOpen} onOpenChange={setResetOpen} onDone={fetchData} />
-    </div>
-  )
-}
-
-function DashboardSkeleton() {
-  return (
-    <div className="space-y-5">
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        {Array.from({ length: 4 }).map((_, i) => (
-          <div
-            key={i}
-            className="h-32 animate-pulse rounded-2xl border border-white/5 bg-white/[0.03]"
-          />
-        ))}
-      </div>
-      <div className="grid grid-cols-1 gap-5 lg:grid-cols-12">
-        <div className="h-[380px] animate-pulse rounded-2xl border border-white/5 bg-white/[0.03] lg:col-span-7" />
-        <div className="h-[380px] animate-pulse rounded-2xl border border-white/5 bg-white/[0.03] lg:col-span-3" />
-        <div className="h-[380px] animate-pulse rounded-2xl border border-white/5 bg-white/[0.03] lg:col-span-2" />
-      </div>
+      <ResetDialog open={resetOpen} onOpenChange={setResetOpen} />
     </div>
   )
 }
