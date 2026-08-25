@@ -17,6 +17,7 @@ import {
   Package,
   Inbox,
   RotateCw,
+  Image as ImageIcon,
 } from 'lucide-react'
 import { Sidebar } from '@/components/admin/sidebar'
 import { Header } from '@/components/admin/header'
@@ -32,6 +33,7 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
+import { ImageManager } from '@/components/admin/image-manager'
 
 interface Product {
   id: string
@@ -81,6 +83,7 @@ export default function ProductsPage() {
   const [createOpen, setCreateOpen] = useState(false)
   const [importOpen, setImportOpen] = useState(false)
   const [editing, setEditing] = useState<Product | null>(null)
+  const [imageManagerProduct, setImageManagerProduct] = useState<Product | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [dragActive, setDragActive] = useState(false)
   const [importResult, setImportResult] = useState<ImportResult | null>(null)
@@ -401,6 +404,13 @@ export default function ProductsPage() {
                             <td className="px-4 py-3">
                               <div className="flex items-center justify-end gap-1">
                                 <button
+                                  onClick={() => setImageManagerProduct(p)}
+                                  className="grid h-8 w-8 place-items-center rounded-lg text-blue-400 transition hover:bg-blue-500/10"
+                                  title="Manage Images"
+                                >
+                                  <ImageIcon className="h-4 w-4" />
+                                </button>
+                                <button
                                   onClick={() => setEditing(p)}
                                   className="grid h-8 w-8 place-items-center rounded-lg text-slate-400 transition hover:bg-white/10 hover:text-white"
                                   title="Edit"
@@ -464,6 +474,18 @@ export default function ProductsPage() {
           fetchProducts()
           setCreateOpen(false)
           setEditing(null)
+        }}
+      />
+
+      {/* Image Manager Dialog */}
+      <ImageManager
+        open={imageManagerProduct !== null}
+        onOpenChange={(v) => {
+          if (!v) setImageManagerProduct(null)
+        }}
+        product={imageManagerProduct}
+        onSaved={() => {
+          fetchProducts()
         }}
       />
 

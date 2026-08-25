@@ -103,6 +103,8 @@ async function main() {
         status: p.status,
         digital: p.digital,
         tags: p.tags,
+        image: (p as any).imageUrl || null,
+        images: (p as any).imageUrl ? [(p as any).imageUrl] : [],
       },
     })
   }
@@ -126,6 +128,7 @@ async function main() {
         digital: p.digital,
         tags: p.tags,
         image: p.imageUrl || null,
+        images: p.imageUrl ? [p.imageUrl] : [],
       },
     })
   }

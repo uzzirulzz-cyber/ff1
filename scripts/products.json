@@ -14,7 +14,8 @@
       "global"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/3e8f17278c49.jpg"
   },
   {
     "sku": "AI-002",
@@ -31,7 +32,8 @@
       "global"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/d1e1e44f9814.jpeg"
   },
   {
     "sku": "AI-003",
@@ -48,7 +50,8 @@
       "global"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/dc40f5cd64ec.png"
   },
   {
     "sku": "AI-004",
@@ -65,7 +68,8 @@
       "global"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/f7d617747124.png"
   },
   {
     "sku": "AI-005",
@@ -82,7 +86,8 @@
       "global"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/1f39e5cb95dc.jpg"
   },
   {
     "sku": "AI-006",
@@ -99,7 +104,8 @@
       "global"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/23317e8d5269.jpg"
   },
   {
     "sku": "AI-007",
@@ -116,7 +122,8 @@
       "global"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/23a445bc819b.jpg"
   },
   {
     "sku": "AI-008",
@@ -133,7 +140,8 @@
       "global"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/494bd509b48f.jpg"
   },
   {
     "sku": "AI-009",
@@ -150,7 +158,8 @@
       "global"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/7f0d64bf1a1f.png"
   },
   {
     "sku": "AI-010",
@@ -167,7 +176,8 @@
       "global"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/e5a9de246fe1.jpg"
   },
   {
     "sku": "AI-011",
@@ -184,7 +194,8 @@
       "global"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/db4b3ef79b82.jpg"
   },
   {
     "sku": "AI-012",
@@ -201,7 +212,8 @@
       "global"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/5302d5b181a8.jpg"
   },
   {
     "sku": "AI-013",
@@ -218,7 +230,8 @@
       "global"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/e2800ccbb416.jpg"
   },
   {
     "sku": "AI-014",
@@ -235,7 +248,8 @@
       "global"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/b7585e846321.jpg"
   },
   {
     "sku": "AI-015",
@@ -252,7 +266,8 @@
       "global"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/37ea9d36b591.jpg"
   },
   {
     "sku": "AI-016",
@@ -269,7 +284,8 @@
       "global"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/451d8d02a532.jpg"
   },
   {
     "sku": "EML-001",
@@ -285,7 +301,8 @@
       "account"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/4629ba44cee4.png"
   },
   {
     "sku": "EML-002",
@@ -301,7 +318,8 @@
       "account"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/e8900fa2c8c9.jpg"
   },
   {
     "sku": "EML-003",
@@ -317,7 +335,8 @@
       "account"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/efbda437e644.png"
   },
   {
     "sku": "EML-004",
@@ -333,7 +352,8 @@
       "account"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/938d900ae982.png"
   },
   {
     "sku": "EML-005",
@@ -349,7 +369,8 @@
       "account"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/4d2cddc78eca.jpg"
   },
   {
     "sku": "EML-006",
@@ -365,7 +386,8 @@
       "account"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/85050d3be706.jpg"
   },
   {
     "sku": "EML-007",
@@ -381,7 +403,8 @@
       "account"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/d6ef0d9cf57d.png"
   },
   {
     "sku": "EML-008",
@@ -397,7 +420,8 @@
       "account"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/65e6f7b9787c.png"
   },
   {
     "sku": "EML-009",
@@ -413,7 +437,8 @@
       "account"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/d1aaa24cf871.png"
   },
   {
     "sku": "GC-001",
@@ -429,7 +454,8 @@
       "us"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/86a8b915404a.jpeg"
   },
   {
     "sku": "GC-002",
@@ -445,7 +471,8 @@
       "nl"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/c9e1af21df00.jpg"
   },
   {
     "sku": "GC-003",
@@ -461,7 +488,8 @@
       "us"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/0dcb70025a25.jpg"
   },
   {
     "sku": "GC-004",
@@ -477,7 +505,8 @@
       "us"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/538715749ae2.jpeg"
   },
   {
     "sku": "GC-005",
@@ -493,7 +522,8 @@
       "us"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/ac4b670126c0.png"
   },
   {
     "sku": "GC-006",
@@ -509,7 +539,8 @@
       "us"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/911ae054a607.png"
   },
   {
     "sku": "GC-007",
@@ -525,7 +556,8 @@
       "us"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/efff74142fc2.jpg"
   },
   {
     "sku": "GC-008",
@@ -541,7 +573,8 @@
       "us"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/29ccb9560b31.jpg"
   },
   {
     "sku": "GC-009",
@@ -557,7 +590,8 @@
       "us"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/0dcb70025a25.jpg"
   },
   {
     "sku": "GC-010",
@@ -573,7 +607,8 @@
       "eu"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/50efcf347cf0.jpg"
   },
   {
     "sku": "GC-011",
@@ -589,7 +624,8 @@
       "eu"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/c89ad1cf7dd0.jpg"
   },
   {
     "sku": "GC-012",
@@ -605,7 +641,8 @@
       "eu"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/c8ee5490d7d7.jpg"
   },
   {
     "sku": "GC-013",
@@ -621,7 +658,8 @@
       "eu"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/8b9b33727929.jpg"
   },
   {
     "sku": "GC-014",
@@ -637,7 +675,8 @@
       "eu"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/ba03e9ba9f39.jpg"
   },
   {
     "sku": "GC-015",
@@ -653,7 +692,8 @@
       "eu"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/2af444e00ab4.png"
   },
   {
     "sku": "GC-016",
@@ -669,7 +709,8 @@
       "eu"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/070fcfe9562d.png"
   },
   {
     "sku": "GC-017",
@@ -685,7 +726,8 @@
       "eu"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/7d81291729e2.jpg"
   },
   {
     "sku": "GC-018",
@@ -701,7 +743,8 @@
       "fr"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/64f8af955579.jpg"
   },
   {
     "sku": "GC-019",
@@ -717,7 +760,8 @@
       "pt"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/64f8af955579.jpg"
   },
   {
     "sku": "GC-020",
@@ -733,7 +777,8 @@
       "de"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/9e399737af1c.jpg"
   },
   {
     "sku": "GC-021",
@@ -749,7 +794,8 @@
       "uk"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/74580b9f5ef0.jpg"
   },
   {
     "sku": "GC-022",
@@ -765,7 +811,8 @@
       "tr"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/7c2d919fc973.jpg"
   },
   {
     "sku": "GC-023",
@@ -781,7 +828,8 @@
       "jp"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/e7c862986a79.jpg"
   },
   {
     "sku": "GC-024",
@@ -797,7 +845,8 @@
       "au"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/efff74142fc2.jpg"
   },
   {
     "sku": "GC-025",
@@ -813,7 +862,8 @@
       "au"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/e3738036f4fe.jpg"
   },
   {
     "sku": "GC-026",
@@ -829,7 +879,8 @@
       "br"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/85bf277ef303.png"
   },
   {
     "sku": "GC-027",
@@ -845,7 +896,8 @@
       "br"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/7c2d919fc973.jpg"
   },
   {
     "sku": "GC-028",
@@ -861,7 +913,8 @@
       "br"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/7c2d919fc973.jpg"
   },
   {
     "sku": "GC-029",
@@ -877,7 +930,8 @@
       "br"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/e6acd94cb224.jpg"
   },
   {
     "sku": "GC-030",
@@ -893,7 +947,8 @@
       "br"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/39aa644a158d.jpg"
   },
   {
     "sku": "GC-031",
@@ -909,7 +964,8 @@
       "br"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/9e12e60f248f.jpg"
   },
   {
     "sku": "GC-032",
@@ -925,7 +981,8 @@
       "br"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/092226fcba66.jpg"
   },
   {
     "sku": "GC-033",
@@ -941,7 +998,8 @@
       "co"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/942198898258.jpg"
   },
   {
     "sku": "GC-034",
@@ -957,7 +1015,8 @@
       "co"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/4aed9e89dbac.jpg"
   },
   {
     "sku": "GC-035",
@@ -973,7 +1032,8 @@
       "co"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/9a7999d38b6f.jpg"
   },
   {
     "sku": "GC-036",
@@ -989,7 +1049,8 @@
       "co"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/4080ee0c0f62.jpg"
   },
   {
     "sku": "GC-037",
@@ -1005,7 +1066,8 @@
       "co"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/707fe589738c.png"
   },
   {
     "sku": "GC-038",
@@ -1021,7 +1083,8 @@
       "mx"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/e2e434179445.png"
   },
   {
     "sku": "GC-039",
@@ -1037,7 +1100,8 @@
       "mx"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/7c2d919fc973.jpg"
   },
   {
     "sku": "IPTV-001",
@@ -1054,7 +1118,8 @@
       "global"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/6274bd46eb48.jpg"
   },
   {
     "sku": "IPTV-002",
@@ -1071,7 +1136,8 @@
       "global"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/1c7bbfd43650.jpg"
   },
   {
     "sku": "IPTV-003",
@@ -1088,7 +1154,8 @@
       "global"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/d642563c612c.jpg"
   },
   {
     "sku": "IPTV-004",
@@ -1105,7 +1172,8 @@
       "global"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/736f01317d60.jpg"
   },
   {
     "sku": "IPTV-005",
@@ -1122,7 +1190,8 @@
       "global"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/6274bd46eb48.jpg"
   },
   {
     "sku": "IPTV-006",
@@ -1139,7 +1208,8 @@
       "global"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/d642563c612c.jpg"
   },
   {
     "sku": "IPTV-007",
@@ -1156,7 +1226,8 @@
       "global"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/4ed18174d4f6.jpg"
   },
   {
     "sku": "IPTV-008",
@@ -1173,7 +1244,8 @@
       "global"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/6274bd46eb48.jpg"
   },
   {
     "sku": "STR-001",
@@ -1189,7 +1261,8 @@
       "account"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/e4e5822b30e1.png"
   },
   {
     "sku": "STR-002",
@@ -1205,7 +1278,8 @@
       "account"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/cf2ae185e451.jpg"
   },
   {
     "sku": "STR-003",
@@ -1221,7 +1295,8 @@
       "account"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/bd38580861a2.png"
   },
   {
     "sku": "STR-004",
@@ -1237,7 +1312,8 @@
       "account"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/3d1794cdd703.jpg"
   },
   {
     "sku": "CC-001",
@@ -1254,7 +1330,8 @@
       "global"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/05fb7ce1bc7b.jpg"
   },
   {
     "sku": "CC-002",
@@ -1271,7 +1348,8 @@
       "global"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/fd1f96c8998d.jpg"
   },
   {
     "sku": "CC-003",
@@ -1288,7 +1366,8 @@
       "global"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/cc743db52378.jpg"
   },
   {
     "sku": "CC-004",
@@ -1305,7 +1384,8 @@
       "global"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/05fb7ce1bc7b.jpg"
   },
   {
     "sku": "CC-005",
@@ -1322,7 +1402,8 @@
       "us"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/10863861cecc.jpg"
   },
   {
     "sku": "CC-006",
@@ -1339,7 +1420,8 @@
       "us"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/0950816b2833.png"
   },
   {
     "sku": "CC-007",
@@ -1356,7 +1438,8 @@
       "eu"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/1d3792efeda0.jpg"
   },
   {
     "sku": "CC-008",
@@ -1373,7 +1456,8 @@
       "eu"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/1f6ed5c04a66.jpg"
   },
   {
     "sku": "CC-009",
@@ -1390,7 +1474,8 @@
       "us"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/677385c5fde3.jpg"
   },
   {
     "sku": "CC-010",
@@ -1407,7 +1492,8 @@
       "eu"
     ],
     "stock": 100,
-    "status": "active"
+    "status": "active",
+    "imageUrl": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/a9f99cf0583a.jpg"
   },
   {
     "sku": "CC-011",
