@@ -1,12 +1,18 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono } from "next/font/google";
+import { Outfit, Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 
-const inter = Inter({
+const outfit = Outfit({
   variable: "--font-geist-sans",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
+});
+
+const jakarta = Plus_Jakarta_Sans({
+  variable: "--font-jakarta",
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800"],
 });
 
 const jetbrainsMono = JetBrains_Mono({
@@ -16,32 +22,62 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "PlayBeat 2 Admin — Digital Pvt Ltd",
+  metadataBase: new URL("https://playbeat.digital"),
+  title: {
+    default: "PlayBeat Digital — Premium Digital Marketplace & Smart Projectors",
+    template: "%s — PlayBeat Digital",
+  },
   description:
-    "PlayBeat Admin Panel — manage orders, products, customers, IPTV and analytics for your digital storefront.",
+    "Instant digital keys, gaming accounts, subscriptions, SaaS licenses, and high-performance 4K Smart Projectors with 24/7 automated delivery.",
   keywords: [
-    "PlayBeat",
-    "Admin Panel",
-    "Dashboard",
-    "E-commerce",
+    "gaming keys",
+    "game accounts",
+    "streaming subscriptions",
+    "smart projectors",
     "IPTV",
-    "Analytics",
+    "SaaS tools",
+    "gift cards",
+    "instant delivery",
+    "PlayBeat Digital",
   ],
-  authors: [{ name: "PlayBeat Digital Pvt Ltd" }],
-  icons: {
-    icon: "/playbeat-logo.png",
+  authors: [{ name: "PlayBeat Digital" }],
+  creator: "PlayBeat Digital",
+  publisher: "PlayBeat Digital",
+  applicationName: "PlayBeat Digital",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
+  alternates: {
+    canonical: "/",
   },
   openGraph: {
-    title: "PlayBeat Admin",
-    description: "Manage your digital storefront with PlayBeat Admin",
+    title: "PlayBeat Digital — Luxury Digital Commerce & Smart Projectors",
+    description:
+      "Instant digital keys, game accounts, streaming subscriptions & 4K Smart Projectors with 24/7 automated delivery.",
+    url: "https://playbeat.digital",
     siteName: "PlayBeat Digital",
+    locale: "en_US",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "PlayBeat Admin",
-    description: "Manage your digital storefront with PlayBeat Admin",
+    title: "PlayBeat Digital — Premium Digital Marketplace & Smart Projectors",
+    description:
+      "Instant digital keys, gaming accounts, subscriptions & 4K Smart Projectors with 24/7 automated delivery.",
   },
+  icons: {
+    icon: "/playbeat-logo.png",
+    apple: "/playbeat-logo.png",
+  },
+  category: "shopping",
 };
 
 export default function RootLayout({
@@ -52,7 +88,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
       <body
-        className={`${inter.variable} ${jetbrainsMono.variable} antialiased bg-background text-foreground font-sans`}
+        className={`${outfit.variable} ${jakarta.variable} ${jetbrainsMono.variable} antialiased bg-background text-foreground font-sans`}
       >
         {children}
         <Toaster />

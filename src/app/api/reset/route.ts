@@ -5,10 +5,26 @@ import bcrypt from 'bcryptjs'
 import fs from 'fs'
 import path from 'path'
 
-// Hidden default admin — sourced from env at runtime, never exposed to client
-const DEFAULT_ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@playbeat.digital'
-const DEFAULT_ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'playbeat1122'
-const DEFAULT_ADMIN_NAME = process.env.ADMIN_NAME || 'PlayBeat Admin'
+// Hidden default admin — embedded from .env (no hardcoded fallback)
+function readEnv(key: string): string {
+  const candidates = [
+    path.join(process.cwd(), '.env'),
+    '/home/z/my-project/.env',
+  ]
+  for (const c of candidates) {
+    try {
+      const text = fs.readFileSync(c, 'utf-8')
+      const m = text.match(new RegExp(`^${key}=["']?([^"'\n]+)["']?`, 'm'))
+      if (m?.[1]?.trim()) return m[1].trim()
+    } catch {
+      // continue
+    }
+  }
+  return ''
+}
+const DEFAULT_ADMIN_EMAIL = process.env.ADMIN_EMAIL || readEnv('ADMIN_EMAIL')
+const DEFAULT_ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || readEnv('ADMIN_PASSWORD')
+const DEFAULT_ADMIN_NAME = process.env.ADMIN_NAME || readEnv('ADMIN_NAME') || 'PlayBeat Admin'
 
 // Real products from CSV (no mock data)
 // Use multiple fallback paths to find products.json regardless of cwd

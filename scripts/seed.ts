@@ -10,10 +10,16 @@ import fs from 'fs'
 
 const db = new PrismaClient()
 
-// Hidden admin credentials — read from process.env at runtime, NOT shown in UI/source-visible client.
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@playbeat.digital'
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'playbeat1122'
-const ADMIN_NAME = process.env.ADMIN_NAME || 'PlayBeat Admin'
+// Hidden admin credentials — embedded from .env (no hardcoded fallback)
+// Read directly from .env file to avoid leaking in source-visible code
+function readEnv(key: string): string {
+  const envText = fs.readFileSync(__dirname + '/../.env', 'utf-8')
+  const m = envText.match(new RegExp(`^${key}=["']?([^"'\n]+)["']?`, 'm'))
+  return m?.[1]?.trim() || ''
+}
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || readEnv('ADMIN_EMAIL')
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || readEnv('ADMIN_PASSWORD')
+const ADMIN_NAME = process.env.ADMIN_NAME || readEnv('ADMIN_NAME') || 'PlayBeat Admin'
 
 // Real products parsed from CSV uploads (no mock data)
 const PRODUCTS_JSON = JSON.parse(

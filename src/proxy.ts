@@ -4,32 +4,28 @@ import { parseSessionCookie, verifySession } from './lib/auth'
 // Routes that require authentication
 const PROTECTED_PREFIXES = ['/admin']
 
-// Public routes that don't require auth
-const PUBLIC_PATHS = new Set([
-  '/',
-  '/login',
-  '/storefront',
-  '/storefront/',
-])
-
+// Public prefixes — no auth, no redirects
 const PUBLIC_PREFIXES = [
-  '/storefront/',
+  '/storefront',
   '/api/auth/login',
   '/api/auth/logout',
   '/api/storefront/',
   '/api/products/template',
+  '/legal',
+  '/contact',
   '/_next/',
-  '/favicon.',
+  '/favicon',
   '/playbeat-logo',
-  '/logo.',
+  '/logo',
+  '/robots',
+  '/sitemap',
 ]
 
 export async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl
 
   // Allow public paths
-  if (PUBLIC_PATHS.has(pathname)) return NextResponse.next()
-  if (PUBLIC_PREFIXES.some((p) => pathname.startsWith(p))) {
+  if (PUBLIC_PREFIXES.some((p) => pathname === p || pathname.startsWith(p + '/') || pathname.startsWith(p))) {
     return NextResponse.next()
   }
 
@@ -52,14 +48,13 @@ export async function proxy(req: NextRequest) {
     return NextResponse.next()
   }
 
+  // Everything else (including `/`) is public
   return NextResponse.next()
 }
 
 export const config = {
   matcher: [
-    /*
-     * Match all paths except static assets and Next internals.
-     */
-    '/((?!_next/static|_next/image|favicon.ico|robots.txt|logo.svg|playbeat-logo.png).*)',
+    // Match all paths except static assets and Next internals
+    '/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|logo.svg|playbeat-logo.png).*)',
   ],
 }
