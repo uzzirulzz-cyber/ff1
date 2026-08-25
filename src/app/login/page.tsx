@@ -1,10 +1,27 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Mail, Lock, Eye, EyeOff, ArrowRight, ShieldCheck, Loader2, AlertCircle } from 'lucide-react'
 
 export default function LoginPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="grid min-h-screen place-items-center bg-[#070b18] text-slate-300">
+          <div className="flex items-center gap-2 text-sm">
+            <Loader2 className="h-4 w-4 animate-spin" />
+            Loading...
+          </div>
+        </div>
+      }
+    >
+      <LoginForm />
+    </Suspense>
+  )
+}
+
+function LoginForm() {
   const router = useRouter()
   const search = useSearchParams()
   const redirect = search.get('redirect') || '/admin'
