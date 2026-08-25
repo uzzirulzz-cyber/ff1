@@ -371,8 +371,10 @@ export default function StorefrontPage() {
             <span>© 2026</span>
           </div>
           <div className="flex items-center gap-4">
-            <a href="#" className="transition hover:text-slate-300">Privacy</a>
-            <a href="#" className="transition hover:text-slate-300">Terms</a>
+            <a href="/legal/privacy" className="transition hover:text-slate-300">Privacy</a>
+            <a href="/legal/terms" className="transition hover:text-slate-300">Terms</a>
+            <a href="/legal/refund" className="transition hover:text-slate-300">Refunds</a>
+            <a href="/contact" className="transition hover:text-slate-300">Contact</a>
             <a href="/login" className="transition hover:text-slate-300">Admin</a>
           </div>
         </div>

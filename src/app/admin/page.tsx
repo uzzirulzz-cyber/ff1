@@ -248,9 +248,10 @@ export default function AdminDashboard() {
                 <span>2026 · All rights reserved.</span>
               </div>
               <div className="flex items-center gap-4">
-                <a href="#" className="transition hover:text-slate-300">Privacy</a>
-                <a href="#" className="transition hover:text-slate-300">Terms</a>
-                <a href="#" className="transition hover:text-slate-300">Support</a>
+                <a href="/legal/privacy" target="_blank" className="transition hover:text-slate-300">Privacy</a>
+                <a href="/legal/terms" target="_blank" className="transition hover:text-slate-300">Terms</a>
+                <a href="/legal/refund" target="_blank" className="transition hover:text-slate-300">Refunds</a>
+                <a href="/contact" target="_blank" className="transition hover:text-slate-300">Support</a>
                 <span className="flex items-center gap-1.5">
                   <span className="h-1.5 w-1.5 animate-pulse-soft rounded-full bg-emerald-400" />
                   Operational
