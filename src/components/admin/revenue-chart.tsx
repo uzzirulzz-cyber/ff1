@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import {
   AreaChart,
   Area,
@@ -15,7 +15,11 @@ import { cn } from '@/lib/utils'
 
 type Tab = 'Revenue' | 'Orders' | 'Customers'
 
-const DATA = [
+interface RevenueChartProps {
+  data?: { date: string; value: number }[]
+}
+
+const FALLBACK_DATA = [
   { date: 'Aug 08', value: 28000 },
   { date: 'Aug 09', value: 32000 },
   { date: 'Aug 10', value: 30500 },
@@ -34,8 +38,13 @@ const DATA = [
 
 const TABS: Tab[] = ['Revenue', 'Orders', 'Customers']
 
-export function RevenueChart() {
+export function RevenueChart({ data }: RevenueChartProps) {
   const [active, setActive] = useState<Tab>('Revenue')
+  const chartData = useMemo(() => (data && data.length ? data : FALLBACK_DATA), [data])
+  const total = useMemo(
+    () => chartData.reduce((s, p) => s + (p.value || 0), 0),
+    [chartData]
+  )
 
   return (
     <div className="flex h-full flex-col rounded-2xl border border-white/5 bg-white/[0.03] p-5 backdrop-blur-md">
@@ -73,7 +82,7 @@ export function RevenueChart() {
       <div className="mt-5 flex items-end gap-3">
         <div>
           <div className="font-mono text-3xl font-bold tracking-tight text-white">
-            Rs 44,800
+            Rs {total.toLocaleString()}
           </div>
           <div className="mt-1 flex items-center gap-1.5 text-xs">
             <span className="inline-flex items-center gap-0.5 rounded-full bg-emerald-500/10 px-1.5 py-0.5 font-semibold text-emerald-400">
@@ -84,15 +93,17 @@ export function RevenueChart() {
         </div>
         <div className="ml-auto hidden items-center gap-2 rounded-xl border border-yellow-400/20 bg-yellow-400/5 px-3 py-1.5 text-xs sm:flex">
           <span className="h-2 w-2 rounded-full bg-yellow-400" />
-          <span className="text-slate-400">Today</span>
-          <span className="font-mono font-semibold text-yellow-400">Rs 44,800</span>
+          <span className="text-slate-400">Total</span>
+          <span className="font-mono font-semibold text-yellow-400">
+            Rs {total.toLocaleString()}
+          </span>
         </div>
       </div>
 
       {/* Chart */}
       <div className="mt-5 h-[240px] w-full">
         <ResponsiveContainer width="100%" height="100%">
-          <AreaChart data={DATA} margin={{ top: 6, right: 6, left: -18, bottom: 0 }}>
+          <AreaChart data={chartData} margin={{ top: 6, right: 6, left: -18, bottom: 0 }}>
             <defs>
               <linearGradient id="revArea" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stopColor="#facc15" stopOpacity={0.35} />

@@ -16,7 +16,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "PlayBeat Admin — Digital Pvt Ltd",
+  title: "PlayBeat 2 Admin — Digital Pvt Ltd",
   description:
     "PlayBeat Admin Panel — manage orders, products, customers, IPTV and analytics for your digital storefront.",
   keywords: [
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "PlayBeat Digital Pvt Ltd" }],
   icons: {
-    icon: "/favicon.svg",
+    icon: "/playbeat-logo.png",
   },
   openGraph: {
     title: "PlayBeat Admin",

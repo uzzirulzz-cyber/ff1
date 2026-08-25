@@ -2,8 +2,9 @@
 
 import { Crown, ChevronDown, Flame, ArrowRight } from 'lucide-react'
 
-interface Product {
+export interface Product {
   rank: number
+  sku?: string
   title: string
   sales: number
   hot: boolean
@@ -11,34 +12,13 @@ interface Product {
   color: string
 }
 
-const PRODUCTS: Product[] = [
-  {
-    rank: 1,
-    title: 'PlayStation Gift Card - $50 (USA)',
-    sales: 12,
-    hot: true,
-    price: 'Rs 24,000',
-    color: '#facc15',
-  },
-  {
-    rank: 2,
-    title: 'PlayStation Gift Card - $25 (USA)',
-    sales: 8,
-    hot: true,
-    price: 'Rs 14,000',
-    color: '#cbd5e1',
-  },
-  {
-    rank: 3,
-    title: 'Netflix Premium 1 Month',
-    sales: 5,
-    hot: false,
-    price: 'Rs 6,800',
-    color: '#d97706',
-  },
+const FALLBACK: Product[] = [
+  { rank: 1, title: 'PlayStation Gift Card - $50 (USA)', sales: 12, hot: true, price: 'Rs 24,000', color: '#facc15' },
+  { rank: 2, title: 'PlayStation Gift Card - $25 (USA)', sales: 8, hot: true, price: 'Rs 14,000', color: '#cbd5e1' },
+  { rank: 3, title: 'Netflix Premium 1 Month', sales: 5, hot: false, price: 'Rs 6,800', color: '#d97706' },
 ]
 
-export function TopProducts() {
+export function TopProducts({ products = FALLBACK }: { products?: Product[] }) {
   return (
     <div className="flex h-full flex-col rounded-2xl border border-white/5 bg-white/[0.03] p-5 backdrop-blur-md">
       <div className="flex items-center justify-between">
@@ -53,7 +33,7 @@ export function TopProducts() {
       </div>
 
       <div className="mt-4 flex-1 space-y-2.5">
-        {PRODUCTS.map((p) => (
+        {products.map((p) => (
           <div
             key={p.rank}
             className="group flex items-center gap-3 rounded-xl border border-white/5 bg-white/[0.02] p-3 transition hover:bg-white/[0.05]"
@@ -94,10 +74,13 @@ export function TopProducts() {
         ))}
       </div>
 
-      <button className="mt-4 flex w-full items-center justify-center gap-1.5 rounded-xl border border-white/10 bg-white/5 py-2.5 text-xs font-medium text-slate-300 transition hover:bg-white/10 hover:text-white">
+      <a
+        href="/admin/products"
+        className="mt-4 flex w-full items-center justify-center gap-1.5 rounded-xl border border-white/10 bg-white/5 py-2.5 text-xs font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
+      >
         View All Products
         <ArrowRight className="h-3.5 w-3.5" />
-      </button>
+      </a>
     </div>
   )
 }

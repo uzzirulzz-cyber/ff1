@@ -3,15 +3,25 @@
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts'
 import { Package, ChevronDown } from 'lucide-react'
 
-const DATA = [
+interface BreakdownItem {
+  name: string
+  value: number
+  color: string
+}
+
+interface OrderBreakdownProps {
+  items?: BreakdownItem[]
+  total?: number
+}
+
+const FALLBACK = [
   { name: 'Completed', value: 1, color: '#3b82f6' },
   { name: 'Processing', value: 1, color: '#10b981' },
   { name: 'Pending', value: 0, color: '#facc15' },
 ]
 
-const TOTAL = DATA.reduce((sum, d) => sum + d.value, 0)
-
-export function OrderBreakdown() {
+export function OrderBreakdown({ items = FALLBACK, total }: OrderBreakdownProps) {
+  const computedTotal = total ?? items.reduce((s, d) => s + d.value, 0)
   return (
     <div className="flex h-full flex-col rounded-2xl border border-white/5 bg-white/[0.03] p-5 backdrop-blur-md">
       <div className="flex items-center justify-between">
@@ -29,7 +39,7 @@ export function OrderBreakdown() {
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie
-              data={DATA}
+              data={items}
               dataKey="value"
               innerRadius={58}
               outerRadius={78}
@@ -38,7 +48,7 @@ export function OrderBreakdown() {
               startAngle={90}
               endAngle={-270}
             >
-              {DATA.map((entry, i) => (
+              {items.map((entry, i) => (
                 <Cell
                   key={`cell-${i}`}
                   fill={entry.color}
@@ -50,7 +60,7 @@ export function OrderBreakdown() {
           </PieChart>
         </ResponsiveContainer>
         <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
-          <div className="font-mono text-4xl font-bold text-white">{TOTAL}</div>
+          <div className="font-mono text-4xl font-bold text-white">{computedTotal}</div>
           <div className="text-[11px] uppercase tracking-wide text-slate-400">
             Total Orders
           </div>
@@ -58,8 +68,8 @@ export function OrderBreakdown() {
       </div>
 
       <div className="mt-4 space-y-2">
-        {DATA.map((d) => {
-          const pct = TOTAL > 0 ? Math.round((d.value / TOTAL) * 100) : 0
+        {items.map((d) => {
+          const pct = computedTotal > 0 ? Math.round((d.value / computedTotal) * 100) : 0
           return (
             <div
               key={d.name}

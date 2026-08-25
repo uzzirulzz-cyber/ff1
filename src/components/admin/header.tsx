@@ -16,9 +16,10 @@ import { cn } from '@/lib/utils'
 
 interface HeaderProps {
   onMenuClick: () => void
+  onReset?: () => void
 }
 
-export function Header({ onMenuClick }: HeaderProps) {
+export function Header({ onMenuClick, onReset }: HeaderProps) {
   const [activeTab, setActiveTab] = useState<'Today' | 'Week' | 'Month'>('Week')
 
   return (
