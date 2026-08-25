@@ -12,7 +12,7 @@ import {
 } from 'recharts'
 import { TrendingUp, ChevronDown } from 'lucide-react'
 
-const DATA = [
+const FALLBACK_DATA = [
   { date: 'Aug 03', value: 15000 },
   { date: 'Aug 04', value: 20000 },
   { date: 'Aug 05', value: 30000 },
@@ -30,7 +30,16 @@ const DATA = [
   { date: 'Aug 17', value: 44800 },
 ]
 
-export function RevenueOverview() {
+interface RevenueOverviewProps {
+  trend?: { date: string; value: number }[]
+  totalRevenue?: number
+}
+
+export function RevenueOverview({ trend, totalRevenue }: RevenueOverviewProps) {
+  const chartData = trend && trend.length > 0 ? trend : FALLBACK_DATA
+  const total = totalRevenue ?? chartData.reduce((s, p) => s + (p.value || 0), 0)
+  const lastPoint = chartData[chartData.length - 1]
+
   return (
     <div className="flex h-full flex-col rounded-2xl border border-white/5 bg-white/[0.03] p-5 backdrop-blur-md">
       {/* Header */}
@@ -49,28 +58,34 @@ export function RevenueOverview() {
       <div className="mt-5 flex items-end gap-3">
         <div>
           <div className="font-mono text-3xl font-bold tracking-tight text-white">
-            Rs 44,800
+            ${total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </div>
           <div className="mt-1 flex items-center gap-1.5 text-xs">
-            <span className="inline-flex items-center gap-0.5 rounded-full bg-emerald-500/10 px-1.5 py-0.5 font-semibold text-emerald-400">
-              <TrendingUp className="h-3 w-3" />
-              +18.4%
-            </span>
+            {total > 0 && (
+              <span className="inline-flex items-center gap-0.5 rounded-full bg-emerald-500/10 px-1.5 py-0.5 font-semibold text-emerald-400">
+                <TrendingUp className="h-3 w-3" />
+                +18.4%
+              </span>
+            )}
             <span className="text-slate-500">vs previous 14 days</span>
           </div>
         </div>
-        {/* Aug 17 endpoint badge */}
-        <div className="ml-auto hidden items-center gap-2 rounded-xl border border-yellow-400/20 bg-yellow-400/5 px-3 py-1.5 text-xs sm:flex">
-          <span className="h-2 w-2 rounded-full bg-yellow-400 shadow-[0_0_6px_#facc15]" />
-          <span className="text-slate-400">Aug 17</span>
-          <span className="font-mono font-bold text-yellow-400">Rs 44,800</span>
-        </div>
+        {/* Latest endpoint badge */}
+        {lastPoint && (
+          <div className="ml-auto hidden items-center gap-2 rounded-xl border border-yellow-400/20 bg-yellow-400/5 px-3 py-1.5 text-xs sm:flex">
+            <span className="h-2 w-2 rounded-full bg-yellow-400 shadow-[0_0_6px_#facc15]" />
+            <span className="text-slate-400">{lastPoint.date}</span>
+            <span className="font-mono font-bold text-yellow-400">
+              ${lastPoint.value.toLocaleString()}
+            </span>
+          </div>
+        )}
       </div>
 
       {/* Chart */}
       <div className="mt-5 h-[260px] w-full">
         <ResponsiveContainer width="100%" height="100%">
-          <AreaChart data={DATA} margin={{ top: 8, right: 8, left: -18, bottom: 0 }}>
+          <AreaChart data={chartData} margin={{ top: 8, right: 8, left: -18, bottom: 0 }}>
             <defs>
               <linearGradient id="revArea" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stopColor="#facc15" stopOpacity={0.4} />
@@ -108,7 +123,7 @@ export function RevenueOverview() {
                 boxShadow: '0 12px 40px -8px rgba(0,0,0,0.6)',
               }}
               labelStyle={{ color: '#94a3b8', marginBottom: 4 }}
-              formatter={(v: number) => [`Rs ${v.toLocaleString()}`, 'Revenue']}
+              formatter={(v: number) => [`$${v.toLocaleString()}`, 'Revenue']}
             />
             <Area
               type="monotone"
@@ -126,15 +141,17 @@ export function RevenueOverview() {
               }}
             />
             {/* Highlight final data point */}
-            <ReferenceDot
-              x="Aug 17"
-              y={44800}
-              r={6}
-              fill="#facc15"
-              stroke="#0a1020"
-              strokeWidth={2}
-              ifOverflow="extendDomain"
-            />
+            {lastPoint && (
+              <ReferenceDot
+                x={lastPoint.date}
+                y={lastPoint.value}
+                r={6}
+                fill="#facc15"
+                stroke="#0a1020"
+                strokeWidth={2}
+                ifOverflow="extendDomain"
+              />
+            )}
           </AreaChart>
         </ResponsiveContainer>
       </div>

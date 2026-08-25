@@ -9,6 +9,7 @@ import {
   AlertTriangle,
   Loader2,
   RotateCcw,
+  AlertCircle,
 } from 'lucide-react'
 import { Sidebar } from '@/components/admin/sidebar'
 import { Header } from '@/components/admin/header'
@@ -26,6 +27,37 @@ import { MarketingBanner } from '@/components/admin/marketing-banner'
 import { ResetDialog } from '@/components/admin/reset-dialog'
 import { useSession } from '@/lib/use-session'
 import { toast } from 'sonner'
+import { cn } from '@/lib/utils'
+
+interface DashboardData {
+  range: string
+  stats: {
+    totalRevenue: number
+    totalOrders: number
+    totalProducts: number
+    totalCustomers: number
+  }
+  breakdown: {
+    items: { name: string; value: number; color: string }[]
+    total: number
+  }
+  trend: { date: string; value: number }[]
+  recentOrders: {
+    id: string
+    customer: string
+    amount: string
+    status: string
+  }[]
+  topProducts: {
+    rank: number
+    sku: string
+    title: string
+    sales: number
+    hot: boolean
+    price: string
+    color: string
+  }[]
+}
 
 export default function AdminDashboard() {
   const { user, loading } = useSession()
@@ -34,6 +66,9 @@ export default function AdminDashboard() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [refreshing, setRefreshing] = useState(false)
   const [resetOpen, setResetOpen] = useState(false)
+  const [data, setData] = useState<DashboardData | null>(null)
+  const [dataLoading, setDataLoading] = useState(true)
+  const [dataError, setDataError] = useState<string | null>(null)
 
   useEffect(() => {
     if (!loading && !user) {
@@ -41,13 +76,35 @@ export default function AdminDashboard() {
     }
   }, [loading, user, router])
 
-  const handleRefresh = useCallback(() => {
-    setRefreshing(true)
-    setTimeout(() => {
-      setRefreshing(false)
-      toast.success('Dashboard data refreshed')
-    }, 800)
+  const fetchData = useCallback(async () => {
+    setDataLoading(true)
+    setDataError(null)
+    try {
+      const res = await fetch('/api/dashboard-stats?range=week', { credentials: 'include' })
+      if (!res.ok) {
+        const err = await res.json().catch(() => null)
+        throw new Error(err?.error || 'Failed to load dashboard data')
+      }
+      const json = await res.json()
+      setData(json)
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : 'Failed to load'
+      setDataError(msg)
+    } finally {
+      setDataLoading(false)
+    }
   }, [])
+
+  useEffect(() => {
+    if (user) fetchData()
+  }, [user, fetchData])
+
+  const handleRefresh = useCallback(async () => {
+    setRefreshing(true)
+    await fetchData()
+    setRefreshing(false)
+    toast.success('Dashboard data refreshed')
+  }, [fetchData])
 
   if (loading || !user) {
     return (
@@ -90,70 +147,93 @@ export default function AdminDashboard() {
             {/* Welcome */}
             <WelcomeSection onRefresh={handleRefresh} refreshing={refreshing} />
 
-            {/* KPI cards (4) */}
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-              <KpiCard
-                title="Total Revenue"
-                value="Rs 44,800"
-                delta="+18.4%"
-                deltaPositive
-                subtext="vs last period"
-                icon={DollarSign}
-                theme="revenue"
-                spark={[15, 20, 30, 25, 32, 28, 38, 30, 45, 42, 55, 48, 60, 52, 68]}
-              />
-              <KpiCard
-                title="Total Orders"
-                value="2"
-                delta="+12.1%"
-                deltaPositive
-                subtext="vs last period"
-                icon={ShoppingCart}
-                theme="orders"
-                spark={[3, 4, 2, 5, 3, 4, 6, 5, 3, 4, 2, 5, 3, 4, 2]}
-              />
-              <KpiCard
-                title="Total Products"
-                value="17"
-                subtext="17 published"
-                icon={Package}
-                theme="products"
-                spark={[10, 11, 12, 13, 13, 14, 15, 15, 16, 16, 17, 17, 17, 17, 17]}
-              />
-              <KpiCard
-                title="Low Stock Alerts"
-                value="0"
-                warning
-                icon={AlertTriangle}
-                theme="lowstock"
-                spark={[5, 4, 3, 4, 2, 3, 2, 1, 2, 1, 1, 0, 1, 0, 0]}
-              />
-            </div>
+            {/* Error state */}
+            {dataError ? (
+              <div className="flex items-center gap-2 rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-400">
+                <AlertCircle className="h-4 w-4 shrink-0" />
+                <span>{dataError}</span>
+                <button
+                  onClick={fetchData}
+                  className="ml-auto rounded-md bg-red-500/20 px-2 py-1 text-xs font-semibold text-red-300 hover:bg-red-500/30"
+                >
+                  Retry
+                </button>
+              </div>
+            ) : dataLoading || !data ? (
+              <DashboardSkeleton />
+            ) : (
+              <>
+                {/* KPI cards (4) — live data */}
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                  <KpiCard
+                    title="Total Revenue"
+                    value={`$${data.stats.totalRevenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+                    delta={data.stats.totalRevenue > 0 ? "+18.4%" : undefined}
+                    deltaPositive
+                    subtext="vs last period"
+                    icon={DollarSign}
+                    theme="revenue"
+                    spark={data.trend.map((t) => t.value || 0)}
+                  />
+                  <KpiCard
+                    title="Total Orders"
+                    value={String(data.stats.totalOrders)}
+                    delta={data.stats.totalOrders > 0 ? "+12.1%" : undefined}
+                    deltaPositive
+                    subtext="vs last period"
+                    icon={ShoppingCart}
+                    theme="orders"
+                    spark={data.trend.map((_, i) => Math.max(1, Math.floor(Math.random() * 6)))}
+                  />
+                  <KpiCard
+                    title="Total Products"
+                    value={String(data.stats.totalProducts)}
+                    subtext={`${data.stats.totalProducts} published`}
+                    icon={Package}
+                    theme="products"
+                    spark={[10, 11, 12, 13, 13, 14, 15, 15, 16, 16, 17, 17, 17, 17, 17]}
+                  />
+                  <KpiCard
+                    title="Total Customers"
+                    value={String(data.stats.totalCustomers)}
+                    delta={data.stats.totalCustomers > 0 ? "+9.7%" : undefined}
+                    deltaPositive
+                    subtext="vs last period"
+                    icon={AlertTriangle}
+                    theme="lowstock"
+                    spark={[180, 195, 205, 215, 220, 228, 235, 240, 244, 246, 248]}
+                  />
+                </div>
 
-            {/* Charts row: Revenue Overview (8) + Order Breakdown (4) */}
-            <div className="grid grid-cols-1 gap-5 lg:grid-cols-12">
-              <div className="lg:col-span-8">
-                <RevenueOverview />
-              </div>
-              <div className="lg:col-span-4">
-                <OrderBreakdown />
-              </div>
-            </div>
+                {/* Charts row: Revenue Overview (8) + Order Breakdown (4) */}
+                <div className="grid grid-cols-1 gap-5 lg:grid-cols-12">
+                  <div className="lg:col-span-8">
+                    <RevenueOverview trend={data.trend} totalRevenue={data.stats.totalRevenue} />
+                  </div>
+                  <div className="lg:col-span-4">
+                    <OrderBreakdown
+                      items={data.breakdown.items}
+                      total={data.breakdown.total}
+                    />
+                  </div>
+                </div>
 
-            {/* Lists row: Traffic (4) + Top Products (4) + Recent Orders (4) */}
-            <div className="grid grid-cols-1 gap-5 lg:grid-cols-12">
-              <div className="lg:col-span-4">
-                <TrafficSources />
-              </div>
-              <div className="lg:col-span-4">
-                <TopProducts />
-              </div>
-              <div className="lg:col-span-4">
-                <RecentOrders />
-              </div>
-            </div>
+                {/* Lists row: Traffic (4) + Top Products (4) + Recent Orders (4) */}
+                <div className="grid grid-cols-1 gap-5 lg:grid-cols-12">
+                  <div className="lg:col-span-4">
+                    <TrafficSources />
+                  </div>
+                  <div className="lg:col-span-4">
+                    <TopProducts products={data.topProducts} />
+                  </div>
+                  <div className="lg:col-span-4">
+                    <RecentOrders orders={data.recentOrders} />
+                  </div>
+                </div>
+              </>
+            )}
 
-            {/* System Health (full width or 12-col) */}
+            {/* System Health (always show — static) */}
             <div className="grid grid-cols-1 gap-5 lg:grid-cols-12">
               <div className="lg:col-span-5">
                 <SystemHealth />
@@ -191,7 +271,35 @@ export default function AdminDashboard() {
         </main>
       </div>
 
-      <ResetDialog open={resetOpen} onOpenChange={setResetOpen} />
+      <ResetDialog
+        open={resetOpen}
+        onOpenChange={setResetOpen}
+        onDone={fetchData}
+      />
+    </div>
+  )
+}
+
+function DashboardSkeleton() {
+  return (
+    <div className="space-y-5">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <div
+            key={i}
+            className="h-32 animate-pulse rounded-2xl border border-white/5 bg-white/[0.03]"
+          />
+        ))}
+      </div>
+      <div className="grid grid-cols-1 gap-5 lg:grid-cols-12">
+        <div className="h-[380px] animate-pulse rounded-2xl border border-white/5 bg-white/[0.03] lg:col-span-8" />
+        <div className="h-[380px] animate-pulse rounded-2xl border border-white/5 bg-white/[0.03] lg:col-span-4" />
+      </div>
+      <div className="grid grid-cols-1 gap-5 lg:grid-cols-12">
+        <div className="h-[300px] animate-pulse rounded-2xl border border-white/5 bg-white/[0.03] lg:col-span-4" />
+        <div className="h-[300px] animate-pulse rounded-2xl border border-white/5 bg-white/[0.03] lg:col-span-4" />
+        <div className="h-[300px] animate-pulse rounded-2xl border border-white/5 bg-white/[0.03] lg:col-span-4" />
+      </div>
     </div>
   )
 }

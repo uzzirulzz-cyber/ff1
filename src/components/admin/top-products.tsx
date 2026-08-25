@@ -4,45 +4,27 @@ import { Crown, ChevronDown, Flame, ArrowRight } from 'lucide-react'
 
 interface Product {
   rank: number
+  sku?: string
   title: string
   sales: number
   hot: boolean
   price: string
   color: string
-  gradient: string
 }
 
-const PRODUCTS: Product[] = [
-  {
-    rank: 1,
-    title: 'PlayStation Gift Card - $50 (USA)',
-    sales: 12,
-    hot: true,
-    price: 'Rs 24,000',
-    color: '#facc15',
-    gradient: 'from-blue-500 to-blue-700',
-  },
-  {
-    rank: 2,
-    title: 'PlayStation Gift Card - $25 (USA)',
-    sales: 8,
-    hot: true,
-    price: 'Rs 14,000',
-    color: '#cbd5e1',
-    gradient: 'from-slate-400 to-slate-600',
-  },
-  {
-    rank: 3,
-    title: 'Netflix Premium 1 Month',
-    sales: 5,
-    hot: false,
-    price: 'Rs 6,800',
-    color: '#d97706',
-    gradient: 'from-red-500 to-red-700',
-  },
+const FALLBACK: Product[] = [
+  { rank: 1, title: 'Cursor AI Pro Subscription 1 Month', sales: 12, hot: true, price: '$31.20', color: '#facc15' },
+  { rank: 2, title: 'CapCut Pro Subscription 1 Month (US)', sales: 8, hot: true, price: '$11.70', color: '#cbd5e1' },
+  { rank: 3, title: 'NFLX Gift Card USD 25 (US)', sales: 5, hot: false, price: '$32.50', color: '#d97706' },
 ]
 
-export function TopProducts() {
+const GRADIENTS = [
+  'from-blue-500 to-blue-700',
+  'from-slate-400 to-slate-600',
+  'from-red-500 to-red-700',
+]
+
+export function TopProducts({ products = FALLBACK }: { products?: Product[] }) {
   return (
     <div className="flex h-full flex-col rounded-2xl border border-white/5 bg-white/[0.03] p-5 backdrop-blur-md">
       <div className="flex items-center justify-between">
@@ -57,7 +39,7 @@ export function TopProducts() {
       </div>
 
       <div className="mt-4 flex-1 space-y-2.5">
-        {PRODUCTS.map((p) => (
+        {products.map((p, i) => (
           <div
             key={p.rank}
             className="group flex items-center gap-3 rounded-xl border border-white/5 bg-white/[0.02] p-3 transition hover:bg-white/[0.05]"
@@ -75,7 +57,7 @@ export function TopProducts() {
             </div>
             {/* Thumbnail */}
             <div
-              className={`relative grid h-10 w-10 shrink-0 place-items-center overflow-hidden rounded-lg bg-gradient-to-br ${p.gradient} text-[10px] font-bold text-white`}
+              className={`relative grid h-10 w-10 shrink-0 place-items-center overflow-hidden rounded-lg bg-gradient-to-br ${GRADIENTS[i] || GRADIENTS[0]} text-[10px] font-bold text-white`}
             >
               {p.title.split(' ')[0].slice(0, 2).toUpperCase()}
             </div>
@@ -97,10 +79,13 @@ export function TopProducts() {
         ))}
       </div>
 
-      <button className="mt-4 flex w-full items-center justify-center gap-1.5 rounded-xl border border-white/10 bg-white/5 py-2.5 text-xs font-medium text-slate-300 transition hover:bg-white/10 hover:text-white">
+      <a
+        href="/admin/products"
+        className="mt-4 flex w-full items-center justify-center gap-1.5 rounded-xl border border-white/10 bg-white/5 py-2.5 text-xs font-medium text-slate-300 transition hover:bg-white/10 hover:text-white"
+      >
         View All Products
         <ArrowRight className="h-3.5 w-3.5" />
-      </button>
+      </a>
     </div>
   )
 }

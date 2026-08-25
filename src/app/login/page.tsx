@@ -1,7 +1,7 @@
 'use client'
 
 import { Suspense, useEffect, useState } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import { Mail, Lock, Eye, EyeOff, ArrowRight, ShieldCheck, Loader2, AlertCircle } from 'lucide-react'
 
 export default function LoginPage() {
@@ -22,7 +22,6 @@ export default function LoginPage() {
 }
 
 function LoginForm() {
-  const router = useRouter()
   const search = useSearchParams()
   const redirect = search.get('redirect') || '/admin'
 
@@ -40,11 +39,11 @@ function LoginForm() {
       .then((data) => {
         if (data?.ok && data?.user?.role === 'admin') {
           setAuthed(true)
-          router.replace(redirect)
+          window.location.href = redirect
         }
       })
       .catch(() => {})
-  }, [router, redirect])
+  }, [redirect])
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -63,8 +62,8 @@ function LoginForm() {
         setSubmitting(false)
         return
       }
-      router.replace(redirect)
-      router.refresh()
+      // Use hard navigation for reliable redirect after cookie is set
+      window.location.href = redirect
     } catch (err) {
       console.error(err)
       setError('Network error. Please try again.')
