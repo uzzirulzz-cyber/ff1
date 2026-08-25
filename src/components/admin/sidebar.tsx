@@ -25,6 +25,7 @@ import {
   ChevronLeft,
   ChevronRight,
   CheckCircle2,
+  Settings,
   X,
   Sparkles,
 } from 'lucide-react'
@@ -84,6 +85,13 @@ const NAV_SECTIONS: NavSection[] = [
       { label: 'Marketing Campaigns', icon: Megaphone, href: '/admin/campaigns' },
       { label: 'Email Templates', icon: Mail, href: '/admin/email-templates' },
       { label: 'Integrations', icon: Puzzle, href: '/admin/integrations' },
+    ],
+  },
+  {
+    title: 'System',
+    items: [
+      { label: 'Profile & Settings', icon: Settings, href: '/admin/profile' },
+      { label: 'Activity Logs', icon: ScrollText, href: '/admin/service-logs' },
     ],
   },
 ]

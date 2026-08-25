@@ -305,15 +305,15 @@ export function Header({ onMenuClick }: HeaderProps) {
                   <div className="text-[11px] text-slate-400">admin@playbeat.digital</div>
                 </div>
                 <div className="py-1">
-                  <button className="flex w-full items-center gap-2 px-3 py-2 text-left text-xs text-slate-300 transition hover:bg-white/5">
+                  <a href="/admin/profile" className="flex w-full items-center gap-2 px-3 py-2 text-left text-xs text-slate-300 transition hover:bg-white/5">
                     <User className="h-3.5 w-3.5 text-slate-400" />
                     My Profile
-                  </button>
-                  <button className="flex w-full items-center gap-2 px-3 py-2 text-left text-xs text-slate-300 transition hover:bg-white/5">
+                  </a>
+                  <a href="/admin/profile" className="flex w-full items-center gap-2 px-3 py-2 text-left text-xs text-slate-300 transition hover:bg-white/5">
                     <Settings className="h-3.5 w-3.5 text-slate-400" />
                     Account Settings
-                  </button>
-                  <button className="flex w-full items-center gap-2 px-3 py-2 text-left text-xs text-red-400 transition hover:bg-red-500/5">
+                  </a>
+                  <button onClick={() => { window.location.href = '/api/auth/logout' }} className="flex w-full items-center gap-2 px-3 py-2 text-left text-xs text-red-400 transition hover:bg-red-500/5">
                     <LogOut className="h-3.5 w-3.5" />
                     Sign out
                   </button>
